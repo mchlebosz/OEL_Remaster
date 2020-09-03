@@ -1,0 +1,71 @@
+// Fonts
+
+$font-head: 'Shadows Into Light Two',
+cursive;
+$font-std: 'Montserrat',
+sans-serif;
+
+@font-face {
+    font-family: "Ebrima";
+    font-display: swap;
+
+    src: url("../../assets/fonts/ebrima.eot") format("eot"),
+        url("../../assets/fonts/ebrima.woff") format("woff"),
+        url("../../assets/fonts/ebrima.ttf") format("truetype"),
+}
+
+$font-stack: 'Ebrima',
+'sans-serif';
+
+// Colors
+
+$c-black: #000;
+$c-brown: #a67c52;
+$c-white: #fff;
+$c-black-main:#4b4949;
+
+$c-accent-1: #ce156f;
+$c-accent-2: #d92d87; //telefon, home, odliczanie slider
+$c-accent-3: #f58298; //button i nagłówki
+$c-content-1: #f5f6fa;
+$c-content-1-a-20: #f5f6fa32;
+$c-content-1-a-40: #f5f6fa64;
+$c-content-1-a-60: #f5f6fa9b;
+$c-content-1-a-80: #f5f6facd;
+$c-content-2: #E9E9E9;
+
+
+$c-gray: #888988;
+$c-gray-dark: dimgray;
+$c-gray-light: #d5d5d5;
+
+$c-white-darker: #E3E5E3;
+$c-white-lighter: #fafafa;
+$c-black-darker:#595959;
+
+$c-transparent: #00000000;
+
+// Breakpoint variables
+
+$lg: 1200px;
+$md: 992px;
+$sm: 768px;
+$xs: 576px;
+
+// Font sizes
+
+$html-font-size: (null: 16px, $md: 15px, $sm: 14px, $xs: 13px);
+$title-font-size: (null: 160px, $md: 140px, $sm: 120px, $xs: 100px);
+$h1-font-size: (null: 38px, $md: 32px, $sm: 28px, $xs: 26px);
+$h2-font-size: (null: 32px, $md: 24px, $sm: 16px, $xs: 11px);
+$h3-font-size: (null: 24px, $md: 18px, $sm: 12px, $xs: 8px);
+$h4-font-size: (null: 18px, $md: 16px, $sm: 10px, $xs: 8px);
+$small-font-size: (null: 10px, $md: 8px, $sm: 8px, $xs: 8px);
+$slider-h1-font-size: (null: 42px, $md: 28px, $sm: 48px, $xs: 32px);
+$slider-h3-font-size: (null: 14px, $md: 12px, $sm: 16px, $xs: 14px);
+$button-font-size: (null: 13px, $md: 12px, $sm: 18px, $xs: 16px);
+$paragraph-font-size: (null: 18px, $lg: 17px, $md: 16px, $sm: 15px, $xs: 14px);
+
+// Paddings
+
+$title-pd: (null: 30px, $md: 15px, $sm: 10px, $xs: 10px);
