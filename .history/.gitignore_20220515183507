@@ -1,5 +1,4 @@
-#editor Specific
-.vs
+
 # Godot-specific ignores
 .import/
 export.cfg

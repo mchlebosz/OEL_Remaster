@@ -1,5 +1,6 @@
 #editor Specific
 .vs
+.history
 # Godot-specific ignores
 .import/
 export.cfg
