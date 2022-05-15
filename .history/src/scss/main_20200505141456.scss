@@ -1,0 +1,22 @@
+/* IMPORT */
+@import "components/variables";
+@import "scss/fontawesome.scss";
+@import "scss/solid.scss";
+@import "scss/brands.scss";
+@import "scss/regular.scss";
+
+//GENERAL
+
+@import "components/reset";
+@import "components/header";
+@import "components/footer";
+@import "components/general";
+
+// HOMEPAGE
+@import "components/ingredients";
+@import "components/grid-items";
+@import "components/text-no-bg";
+@import "components/bg-images";
+@import "components/preloader";
+@import "components/button";
+@import "components/homepage/banner.scss";
