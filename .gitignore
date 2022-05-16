@@ -274,6 +274,9 @@ import-summary.txt
 
 # Force SDL LIB
 !SDL2-2.0.22
-!/SDL2-2.0.22
-!/SDL2-2.0.22/lib
+!SDL2-2.0.22/lib
+!SDL2-2.0.22/lib/x64
+!SDL2-2.0.22/lib/x86
+
+
 
