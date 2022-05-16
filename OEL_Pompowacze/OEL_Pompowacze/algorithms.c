@@ -1,6 +1,6 @@
 #include "algorithms.h"
 
-void insertion_sort(int* data, unsigned int n) {
+void insertion_sort(int* data, uint32 n) {
     for (int i = 1, j; i < n; ++i) {
         int tmp = data[i];
         for (j = i - 1; j >= 0 && data[j] > tmp; --j) {
@@ -40,11 +40,11 @@ void _quick_sort(int* data, int left, int right) {
     _quick_sort(data, piv + 1, right);
 }
 
-void quick_sort(int* data, unsigned int n) {
+void quick_sort(int* data, uint32 n) {
     _quick_sort(data, 0, n - 1);
 }
 
-void _heapify(int* data, int i, unsigned int n) {
+void _heapify(int* data, int i, uint32 n) {
     int root = i;
     int left = 2 * i + 1;
     int right = 2 * i + 2;
@@ -57,13 +57,13 @@ void _heapify(int* data, int i, unsigned int n) {
     }
 }
 
-void create_heap(int* data, unsigned int n) {
+void create_heap(int* data, uint32 n) {
     for (int i = n / 2 - 1; i >= 0; --i) {
         _heapify(data, i, n);
     }
 }
 
-void heap_sort(int* data, unsigned int n) {
+void heap_sort(int* data, uint32 n) {
     create_heap(data, n);
 
     for (int i = n - 1; i > 0; --i) {
@@ -75,7 +75,7 @@ void heap_sort(int* data, unsigned int n) {
 void _intro_sort(int* data, int left, int right, int depth) {
     if (left >= right) return;
 
-    unsigned int size = right - left + 1;
+    uint32 size = right - left + 1;
     if (size < 16) return insertion_sort(data + left, size);
     if (depth <= 0) return heap_sort(data + left, size);
 
@@ -84,7 +84,7 @@ void _intro_sort(int* data, int left, int right, int depth) {
     _intro_sort(data, piv + 1, right, depth - 1);
 }
 
-void intro_sort(int* data, unsigned int n) {
+void intro_sort(int* data, uint32 n) {
     int max_depth = 2 * log(n);
     _intro_sort(data, 0, n - 1, max_depth);
 }

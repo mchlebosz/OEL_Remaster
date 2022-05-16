@@ -18,17 +18,17 @@
 
 
 
-void insertion_sort(int* data, unsigned int n);
-void quick_sort(int* data, unsigned int n);
-void heap_sort(int* data, unsigned int n);
-void intro_sort(int* data, unsigned int n);
+void insertion_sort(int* data, uint32 n);
+void quick_sort(int* data, uint32 n);
+void heap_sort(int* data, uint32 n);
+void intro_sort(int* data, uint32 n);
 
-void create_heap(int* data, unsigned int n);
+void create_heap(int* data, uint32 n);
 
 //int _median(int* data, int a, int b, int c);
 //int _partition(int* data, int left, int right);
 //void _quick_sort(int* data, int left, int right);
-//void _heapify(int* data, int i, unsigned int n);
+//void _heapify(int* data, int i, uint32 n);
 //void _intro_sort(int* data, int left, int right, int depth);
 
 #endif // !ALGORITHMS_H

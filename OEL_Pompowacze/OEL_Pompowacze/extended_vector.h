@@ -8,10 +8,16 @@
 #include "vector.h"
 #include "algorithms.h"
 
-
+// creates char vector (not a string)
 vector cvector_create();
+
+//creates integer vector
 vector ivector_create();
+
+//creates float vector
 vector fvector_create();
+
+//creates double (long float) vector
 vector dvector_create();
 
 // push_back char type value

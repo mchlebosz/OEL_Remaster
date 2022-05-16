@@ -30,7 +30,7 @@ void string_remove(string* s, uint32 index)
 	vector_remove(s, index);
 }
 
-const char* string_data(const string* const s)
+char* string_data(const string* const s)
 {
 	return (char*)s->data;
 }
