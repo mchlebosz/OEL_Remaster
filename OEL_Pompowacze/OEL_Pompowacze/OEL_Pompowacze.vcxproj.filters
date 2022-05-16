@@ -13,10 +13,51 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="utils">
+      <UniqueIdentifier>{23811ec1-9a72-4b20-a737-b374e4099de3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="containers">
+      <UniqueIdentifier>{ff89cd66-fcf5-4491-a51a-51f75aee3c42}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.c">
       <Filter>Pliki źródłowe</Filter>
     </ClCompile>
+    <ClCompile Include="algorithms.c">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="exceptions.c">
+      <Filter>utils</Filter>
+    </ClCompile>
+    <ClCompile Include="vector.c">
+      <Filter>containers</Filter>
+    </ClCompile>
+    <ClCompile Include="string.c">
+      <Filter>containers</Filter>
+    </ClCompile>
+    <ClCompile Include="extended_vector.c">
+      <Filter>containers</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="algorithms.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="basic_types.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="exceptions.h">
+      <Filter>utils</Filter>
+    </ClInclude>
+    <ClInclude Include="vector.h">
+      <Filter>containers</Filter>
+    </ClInclude>
+    <ClInclude Include="string.h">
+      <Filter>containers</Filter>
+    </ClInclude>
+    <ClInclude Include="extended_vector.h">
+      <Filter>containers</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

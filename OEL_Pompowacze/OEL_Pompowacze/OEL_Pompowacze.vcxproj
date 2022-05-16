@@ -143,7 +143,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="algorithms.c" />
+    <ClCompile Include="exceptions.c" />
+    <ClCompile Include="extended_vector.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="string.c" />
+    <ClCompile Include="vector.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="algorithms.h" />
+    <ClInclude Include="basic_types.h" />
+    <ClInclude Include="exceptions.h" />
+    <ClInclude Include="extended_vector.h" />
+    <ClInclude Include="string.h" />
+    <ClInclude Include="vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
