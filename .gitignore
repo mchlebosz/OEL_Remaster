@@ -272,3 +272,8 @@ import-summary.txt
 .idea
 *.iml
 
+# Force SDL LIB
+!SDL2-2.0.22
+!/SDL2-2.0.22
+!/SDL2-2.0.22/lib
+
