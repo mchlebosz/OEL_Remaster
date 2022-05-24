@@ -5,10 +5,22 @@
 #include <SDL.h>
 #include <stdio.h>
 
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 600
+
+
+//int show_menu(SDL_Surface* screen, TTF_Font ) {
+//	
+//}
 
 int main(int argc, char* args[]) {
+
+	SDL_DisplayMode dm;
+	SDL_GetCurrentDisplayMode(0, &dm);
+	
+	int screen_width = dm.w;
+	int screen_height = dm.h;
+	
 	SDL_Window* window = NULL;
 	SDL_Surface* screenSurface = NULL;
 	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
@@ -19,7 +31,7 @@ int main(int argc, char* args[]) {
 		"hello_sdl2",
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 		SCREEN_WIDTH, SCREEN_HEIGHT,
-		SDL_WINDOW_SHOWN
+		SDL_WINDOW_FULLSCREEN_DESKTOP
 	);
 	if (window == NULL) {
 		fprintf(stderr, "could not create window: %s\n", SDL_GetError());
