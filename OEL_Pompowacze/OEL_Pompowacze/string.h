@@ -12,6 +12,7 @@
 typedef struct vector string;
 
 string string_create();
+string* string_create_dynamic();
 
 void string_append(string* s, char c);
 char string_get(const string* const s, uint32 index);

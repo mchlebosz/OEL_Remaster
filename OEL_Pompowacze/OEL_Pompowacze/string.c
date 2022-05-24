@@ -2,9 +2,16 @@
 
 string string_create()
 {
-	vector v = vector_create(sizeof(char));
+	vector v = cvector_create();
 	cvector_push(&v, '\0');
 	return *(string*)&v;
+}
+
+string* string_create_dynamic()
+{
+	vector* v = vector_create_dynamic(sizeof(char));
+	cvector_push(v, '\0');
+	return (string*)v;
 }
 
 void string_append(string* s, char c)
@@ -39,4 +46,7 @@ size_t string_size(const string* const s)
 {
 	return s->size - 1;
 }
+
+
+
 
