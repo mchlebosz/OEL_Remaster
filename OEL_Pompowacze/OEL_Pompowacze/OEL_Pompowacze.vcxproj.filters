@@ -59,8 +59,5 @@
     <ClInclude Include="extended_vector.h">
       <Filter>containers</Filter>
     </ClInclude>
-    <ClInclude Include="main_menu.h">
-      <Filter>Pliki nagłówkowe</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
