@@ -12,59 +12,73 @@
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 
+void print_text(SDL_Surface* screen, int x, int y, int size, SDL_Color front, string* s) {
+	TTF_Font* sans = TTF_OpenFont("Sans.ttf", size);
 
-int main(int argc, char* args[]) {
+	SDL_Surface* textSurface = TTF_RenderText_Blended(sans, string_begin(s), front);
 
-	SDL_DisplayMode dm;
-	SDL_GetCurrentDisplayMode(0, &dm);
+	SDL_Rect textLocation = { x, y, 0, 0 };
+	SDL_BlitSurface(textSurface, NULL, screen, &textLocation);
+	SDL_FreeSurface(textSurface);
+	TTF_CloseFont(sans);
+}
+
+int main(int argc, char* args[])
+{
+	//SDL_DisplayMode dm;
+	//SDL_GetCurrentDisplayMode(0, &dm);
 	
-	int screen_width = dm.w;
-	int screen_height = dm.h;
-	SDL_Renderer* renderer = NULL;
-	SDL_Window* window = NULL;
-	SDL_Surface* screenSurface = NULL;
-	if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+
+	SDL_Renderer* renderer;
+	SDL_Window* window;
+	SDL_Surface* screen = NULL;
+	SDL_Texture* texture = NULL;
+
+
+	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
 		fprintf(stderr, "could not initialize sdl2: %s\n", SDL_GetError());
 		return 1;
 	}
-	window = SDL_CreateWindow(
-		"hello_sdl2",
-		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-		SCREEN_WIDTH, SCREEN_HEIGHT,
-		SDL_WINDOW_FULLSCREEN_DESKTOP
-	);
-	SDL_CreateWindowAndRenderer(
-		SCREEN_WIDTH, SCREEN_HEIGHT,
-		SDL_WINDOW_FULLSCREEN_DESKTOP, window, renderer
-	);
-	if (window == NULL) {
-		fprintf(stderr, "could not create window: %s\n", SDL_GetError());
-		return 1;
-	}
 
+	int rc = SDL_CreateWindowAndRenderer(
+		SCREEN_WIDTH, SCREEN_HEIGHT,
+		0, &window, &renderer
+	);
+
+
+
+	if (rc != 0) {
+		SDL_Quit();
+		printf("SDL_CreateWindowAndRenderer error: %s\n", SDL_GetError());
+		exit(1);
+	};
+
+	screen = SDL_CreateRGBSurface(0, 1920, 1080, 32,
+		0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000);
+	texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888,
+		SDL_TEXTUREACCESS_STREAMING,
+		SCREEN_WIDTH, SCREEN_HEIGHT);
+	TTF_Init();
+	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
+	SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+	SDL_SetWindowTitle(window, "ioio taniec fall geys");
+
+	//SDL_Delay(2000);
+	//SDL_DestroyWindow(window);
+	SDL_Color white = { 255,255,255 };
+	Uint32 black = SDL_MapRGB(screen->format, 0x00, 0x00, 0x00);
+	SDL_FillRect(screen, NULL, black);
+
+	string s = string_create();
+	string_append_range(&s, "XDDD ez");
+	print_text(screen, 50, 50, 24, white, &s);
 	
-	screenSurface = SDL_GetWindowSurface(window);
-	SDL_FillRect(screenSurface, NULL, SDL_MapRGB(screenSurface->format, 0xFF, 0xDD, 0xFF));
+	SDL_UpdateTexture(texture, NULL, screen->pixels, screen->pitch);
+	SDL_RenderCopy(renderer, texture, NULL, NULL);
+	SDL_RenderPresent(renderer);
+
 	SDL_UpdateWindowSurface(window);
-	SDL_Delay(2000);
-	SDL_DestroyWindow(window);
-
-
-	//this opens a font style and sets a size
-	TTF_Font* Sans = TTF_OpenFont("Sans.ttf", 24);
-
-	// this is the color in rgb format,
-	// maxing out all would give you the color white,
-	// and it will be your text's color
-	SDL_Color White = { 255, 255, 255 };
-
-	// as TTF_RenderText_Solid could only be used on
-	// SDL_Surface then you have to create the surface first
-	SDL_Surface* surfaceMessage =
-		TTF_RenderText_Solid(Sans, "put your text here", White);
-
-	// now you can convert it into a texture
-	SDL_Texture* Message = SDL_CreateTextureFromSurface(renderer, surfaceMessage);
 
 	SDL_Rect Message_rect; //create a rect
 	Message_rect.x = 0;  //controls the rect's x coordinate 
@@ -83,15 +97,11 @@ int main(int argc, char* args[]) {
 	// the crop size (you can ignore this if you don't want
 	// to dabble with cropping), and the rect which is the size
 	// and coordinate of your texture
-	SDL_RenderCopy(renderer, Message, NULL, &Message_rect);
-	
+
 	SDL_Delay(3000);
 
 
 	// Don't forget to free your surface and texture
-	SDL_FreeSurface(surfaceMessage);
-	SDL_DestroyTexture(Message);
-	
 
 
 	SDL_Quit();

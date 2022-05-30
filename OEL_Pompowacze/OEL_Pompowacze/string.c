@@ -20,6 +20,17 @@ void string_append(string* s, char c)
 	cvector_push(s, '\0');
 }
 
+void string_append_range(string* s, char* range)
+{
+	vector* v = s;
+	
+	vector_remove(v, v->size - 1);
+	while (*range != '\0') {
+		cvector_push(v, *range++);
+	}
+	cvector_push(v, '\0');
+}
+
 char string_get(const string* const s, uint32 index)
 {
 	return *(char*)vector_get(s, index);
@@ -40,6 +51,16 @@ void string_remove(string* s, uint32 index)
 char* string_data(const string* const s)
 {
 	return (char*)s->data;
+}
+
+char* string_begin(const string* s)
+{
+	return s->data;
+}
+
+char* string_end(const string* s)
+{
+	return (char*)((ptr_size)s->data + s->size);
 }
 
 size_t string_size(const string* const s)
