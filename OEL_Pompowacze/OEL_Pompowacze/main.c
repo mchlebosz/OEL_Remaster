@@ -1,4 +1,4 @@
-// SDL2 Hello, World!
+﻿// SDL2 Hello, World!
 // This should display a pink screen for 2 seconds
 // compile with: clang++ main.cpp -o hello_sdl2 -lSDL2
 // run with: ./hello_sdl2
@@ -12,8 +12,8 @@
 #include "button.h"
 #include "string.h"
 
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
+#define SCREEN_WIDTH 1920
+#define SCREEN_HEIGHT 1080
 
 void print_text(SDL_Surface* screen, int x, int y, int size, SDL_Color front, string* s) {
 	TTF_Font* sans = TTF_OpenFont("Sans.ttf", size);
@@ -56,9 +56,12 @@ int main(int argc, char* args[])
 		printf("IMG_LoadTexture error: %s\n", IMG_GetError());
 		exit(1);
 	}
-	
-	//button_t button = button_create(renderer, "");
-	
+
+	int rc = SDL_CreateWindowAndRenderer(
+		SCREEN_WIDTH, SCREEN_HEIGHT,
+		0, &window, &renderer
+	);
+
 
 	while (running) {
 		mouse_update(&mouse);
@@ -99,12 +102,28 @@ int main(int argc, char* args[])
 	//SDL_Delay(2000);
 	//SDL_DestroyWindow(window);
 	SDL_Color white = { 255,255,255 };
-	Uint32 black = SDL_MapRGB(screen->format, 0x00, 0x00, 0x00);
-	//SDL_FillRect(screen, NULL, black);
+	SDL_Color pink = { 255,0,255 };
+	SDL_Color red = { 255,0,0 };
+	SDL_Color green = { 0,255,0 };
+	SDL_Color blue = { 0,0,255 };
+	SDL_Color yellow = { 255,255,0 };
+	SDL_Color orange = { 255,165,0 };
+	SDL_Color purple = { 128,0,128 };
+	SDL_Color brown = { 165,42,42 };
+	SDL_Color gray = { 128,128,128 };
+	
+	Uint32 black_map = SDL_MapRGB(screen->format, 0x00, 0x00, 0x00);
+	Uint32 white_map = SDL_MapRGB(screen->format, 0xFF, 0xFF, 0xFF);
+	Uint32 grey_map = SDL_MapRGB(screen->format, 0x80, 0x80, 0x80);
+	SDL_FillRect(screen, NULL, grey_map);
 
 	string s = string_create();
-	string_append_range(&s, "XDDD ez");
-	print_text(screen, 50, 50, 24, white, &s);
+	string_append_range(&s, "To ten, Tytul czy cos: OEL Pompowacze");
+	print_text(screen, 50, 50, 24, red, &s);
+	s = string_create();
+	string_append_range(&s, "Jest totalnie chujowy antyaliasing");
+	print_text(screen, 50, 100, 24, red, &s);
+
 	
 	SDL_UpdateTexture(texture, NULL, screen->pixels, screen->pitch);
 	SDL_RenderCopy(renderer, texture, NULL, NULL);
@@ -117,6 +136,8 @@ int main(int argc, char* args[])
 
 
 	// Don't forget to free your surface and texture
+
+	//Have we done it?
 
 
 	SDL_Quit();
