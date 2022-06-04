@@ -57,12 +57,6 @@ int main(int argc, char* args[])
 		exit(1);
 	}
 
-	int rc = SDL_CreateWindowAndRenderer(
-		SCREEN_WIDTH, SCREEN_HEIGHT,
-		0, &window, &renderer
-	);
-
-
 	while (running) {
 		mouse_update(&mouse);
 		double delta = (SDL_GetTicks() - time) / 1000.0;
