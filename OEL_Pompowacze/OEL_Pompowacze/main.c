@@ -7,133 +7,50 @@
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 
+#include "game.h"
+#include "menu.h"
 #include <stdio.h>
+#include "label.h"
 #include "mouse.h"
 #include "button.h"
 #include "string.h"
-
-#define SCREEN_WIDTH 1920
-#define SCREEN_HEIGHT 1080
-
-void print_text(SDL_Surface* screen, int x, int y, int size, SDL_Color front, string* s) {
-	TTF_Font* sans = TTF_OpenFont("Sans.ttf", size);
-
-	SDL_Surface* textSurface = TTF_RenderText_Blended(sans, string_begin(s), front);
-
-	SDL_Rect textLocation = { x, y, 0, 0 };
-	SDL_BlitSurface(textSurface, NULL, screen, &textLocation);
-	SDL_FreeSurface(textSurface);
-	TTF_CloseFont(sans);
-}
+#include "inputbox.h"
 
 int main(int argc, char* args[])
 {
+	const uint8 max_fps = 165;
+	const double max_frequency = 1.0 / (double)max_fps;
+	
 	SDL_Init(SDL_INIT_EVERYTHING);
 	TTF_Init();
 	
+
 	SDL_Window* window = SDL_CreateWindow("OEL Pompowacze!", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-	SDL_Surface* screen = SDL_CreateRGBSurface(0, 1920, 1080, 32, 0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000);
-	SDL_Texture* texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_ARGB8888, SDL_TEXTUREACCESS_STREAMING, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	mouse_t mouse = mouse_create(renderer);
+	mouse_t* mouse = (mouse_t*)malloc(sizeof(mouse_t));
+	*mouse = mouse_create(renderer);
+
+	game_t game = { window, renderer, mouse, max_frequency };
 
 	if (window == NULL) {
 		SDL_Quit();
-		printf("SDL_CreateWindowAndRenderer error: %s\n", SDL_GetError());
+		printf("SDL_CreateWindow error: %s\n", SDL_GetError());
 		exit(1);
 	};
 
-	SDL_Rect rect = { 25, 25, 50, 50 };
 	
-	float x = rect.x;
-
-	bool running = true;
-	double time = SDL_GetTicks();
 	
+	/*
 	SDL_Texture* txt = IMG_LoadTexture(renderer, "test.png");
 	if (!txt) {
 		printf("IMG_LoadTexture error: %s\n", IMG_GetError());
 		exit(1);
 	}
-
-	while (running) {
-		mouse_update(&mouse);
-		double delta = (SDL_GetTicks() - time) / 1000.0;
-		time = SDL_GetTicks();
-
-		SDL_Event event;
-		while (SDL_PollEvent(&event)) {
-			if (event.type == SDL_QUIT) {
-				running = false;
-				break;
-			}
-		}
-		uint8_t* key = SDL_GetKeyboardState(0);
-		
-
-		if (key[SDL_SCANCODE_A]) {
-			x += -100 * delta;
-		}
-		if (key[SDL_SCANCODE_D]) {
-			x += 100 * delta;
-		}
-		rect.x = x;
-		SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-		SDL_RenderClear(renderer);
-		SDL_SetRenderDrawColor(renderer, 125, 0, 125, 255);
-		SDL_RenderFillRect(renderer, &rect);
-		SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-		SDL_RenderCopy(renderer, txt, NULL, &rect);
-		SDL_RenderDrawRect(renderer, &rect);
-
-		mouse_draw(renderer, &mouse);
-		SDL_RenderPresent(renderer);
-	}
-
-	//SDL_RenderSetLogicalSize(renderer, SCREEN_WIDTH, SCREEN_HEIGHT);
-
-	//SDL_Delay(2000);
-	//SDL_DestroyWindow(window);
-	SDL_Color white = { 255,255,255 };
-	SDL_Color pink = { 255,0,255 };
-	SDL_Color red = { 255,0,0 };
-	SDL_Color green = { 0,255,0 };
-	SDL_Color blue = { 0,0,255 };
-	SDL_Color yellow = { 255,255,0 };
-	SDL_Color orange = { 255,165,0 };
-	SDL_Color purple = { 128,0,128 };
-	SDL_Color brown = { 165,42,42 };
-	SDL_Color gray = { 128,128,128 };
+	*/
 	
-	Uint32 black_map = SDL_MapRGB(screen->format, 0x00, 0x00, 0x00);
-	Uint32 white_map = SDL_MapRGB(screen->format, 0xFF, 0xFF, 0xFF);
-	Uint32 grey_map = SDL_MapRGB(screen->format, 0x80, 0x80, 0x80);
-	SDL_FillRect(screen, NULL, grey_map);
-
-	string s = string_create();
-	string_append_range(&s, "To ten, Tytul czy cos: OEL Pompowacze");
-	print_text(screen, 50, 50, 24, red, &s);
-	s = string_create();
-	string_append_range(&s, "Jest totalnie chujowy antyaliasing");
-	print_text(screen, 50, 100, 24, red, &s);
-
+	start_loop(&game);
 	
-	SDL_UpdateTexture(texture, NULL, screen->pixels, screen->pitch);
-	SDL_RenderCopy(renderer, texture, NULL, NULL);
-	SDL_RenderPresent(renderer);
-
-	SDL_UpdateWindowSurface(window);
-
-
-	SDL_Delay(3000);
-
-
-	// Don't forget to free your surface and texture
-
-	//Have we done it?
-
-
 	SDL_Quit();
 	return 0;
 }

@@ -160,8 +160,12 @@
     <ClInclude Include="button.h" />
     <ClInclude Include="exceptions.h" />
     <ClInclude Include="extended_vector.h" />
+    <ClInclude Include="game.h" />
+    <ClInclude Include="inputbox.h" />
+    <ClInclude Include="menu.h" />
     <ClInclude Include="mouse.h" />
     <ClInclude Include="string.h" />
+    <ClInclude Include="label.h" />
     <ClInclude Include="vector.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -7,6 +7,13 @@ string string_create()
 	return *(string*)&v;
 }
 
+string string_create_from_cstring(const char* cstring)
+{
+	string s = string_create();
+	string_append_range(&s, cstring);
+	return s;
+}
+
 string* string_create_dynamic()
 {
 	vector* v = vector_create_dynamic(sizeof(char));
