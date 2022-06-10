@@ -163,6 +163,7 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="inputbox.h" />
     <ClInclude Include="menu.h" />
+    <ClInclude Include="menu_read_player_number.h" />
     <ClInclude Include="mouse.h" />
     <ClInclude Include="string.h" />
     <ClInclude Include="label.h" />

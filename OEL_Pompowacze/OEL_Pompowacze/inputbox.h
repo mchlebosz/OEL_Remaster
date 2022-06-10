@@ -84,6 +84,9 @@ char get_pressed_key(SDL_Event event) {
 	if (event.key.keysym.sym == SDLK_BACKSPACE) {
 		return '\b';
 	}
+	if (event.key.keysym.sym == SDLK_RETURN) {
+		return '\r';
+	}
 	return -1;
 }
 
