@@ -68,8 +68,6 @@ void start_loop(game_t* game) {
 		
 		
 	}
-	SDL_DestroyTexture(b.txt);
-
 }
 
 
