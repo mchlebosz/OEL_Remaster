@@ -65,7 +65,7 @@ void inputbox_update(inputbox_t* inputbox, mouse_t* mouse, bool mouse_click) {
 }
 
 void inputbox_draw(inputbox_t* inputbox) {
-	label_draw(&inputbox->lb, inputbox->rect.x, inputbox->rect.y);
+	label_draw(&inputbox->lb, inputbox->rect.x + 3, inputbox->rect.y);
 	SDL_SetRenderDrawColor(inputbox->lb.renderer, 255, 255, 255, 255); // draw border
 	SDL_RenderDrawRect(inputbox->lb.renderer, &inputbox->rect);
 }

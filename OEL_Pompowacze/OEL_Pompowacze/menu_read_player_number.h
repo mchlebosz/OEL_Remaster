@@ -13,10 +13,12 @@
 #include "inputbox.h"
 
 int read_player_number(game_t* game) {
-	const string text = string_create_from_cstring("Podaj liczbe graczy! (2-4)");
-	const label label = label_create(game->renderer, 40, text, purple);
 	
-	inputbox_t box = input_create(game->renderer, 26, SCREEN_WIDTH / 2 - 50, SCREEN_HEIGHT / 2 + 10, 100, 100, green);
+	const string text = string_create_from_cstring("Podaj liczbe graczy! (2-4)");
+	const label label = label_create(game->renderer, 40, text, white);
+	
+	SDL_Color bgcolor = { 91, 47, 115 };
+	inputbox_t box = input_create(game->renderer, 36, SCREEN_WIDTH / 2 - 60, SCREEN_HEIGHT / 2 + 10, 120, NULL, pink);
 
 	bool running = true;
 	double time = SDL_GetTicks();
@@ -53,7 +55,7 @@ int read_player_number(game_t* game) {
 		}
 
 		inputbox_update(&box, game->mouse, mouse_click);
-		SDL_SetRenderDrawColor(game->renderer, 0, 0, 0, 255);
+		SDL_SetRenderDrawColor(game->renderer, 91, 47, 115, 255);
 		SDL_RenderClear(game->renderer);
 
 		inputbox_draw(&box);

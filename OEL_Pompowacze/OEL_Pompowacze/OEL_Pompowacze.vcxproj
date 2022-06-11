@@ -165,6 +165,7 @@
     <ClInclude Include="menu.h" />
     <ClInclude Include="menu_read_player_number.h" />
     <ClInclude Include="mouse.h" />
+    <ClInclude Include="predictions_graph.h" />
     <ClInclude Include="string.h" />
     <ClInclude Include="label.h" />
     <ClInclude Include="vector.h" />

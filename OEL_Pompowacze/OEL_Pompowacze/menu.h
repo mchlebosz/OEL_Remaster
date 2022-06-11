@@ -15,9 +15,12 @@
 #include "button.h"
 #include "inputbox.h"
 #include "menu_read_player_number.h"
+#include "predictions_graph.h"
 
 void start_loop(game_t* game) {
-
+	vector pred = generate_prices(1, 4);
+	prices_loop(game, &pred);
+	
 	const int player_number = read_player_number(game);
 	printf("%d", player_number);
 	bool running = true;
