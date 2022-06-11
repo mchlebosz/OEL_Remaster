@@ -1,9 +1,6 @@
 #pragma once
 
 #include <SDL.h>
-#include <SDL_ttf.h>
-#include <SDL_image.h>
-
 #include <stdio.h>
 #include "game.h"
 #include "string.h"
@@ -12,14 +9,17 @@
 #include "button.h"
 #include "inputbox.h"
 
-int read_player_number(game_t* game) {
-	
-	const string text = string_create_from_cstring("Podaj liczbe graczy! (2-4)");
-	const label label = label_create(game->renderer, 40, text, white);
-	
+vector read_player_names(game_t* game, int player_count) {
+
+	int p_num = 1;
+	vector players = svector_create();
+
 	SDL_Color bgcolor = { 91, 47, 115 };
 	inputbox_t box = input_create(game->renderer, 36, SCREEN_WIDTH / 2 - 60, SCREEN_HEIGHT / 2 + 10, 120, NULL, pink);
-
+	box.active = true;
+	string text = string_create_from_cstring("nazwa gracza nr 1");
+	label label = label_create(game->renderer, 40, text, white);
+	
 	bool running = true;
 	double time = SDL_GetTicks();
 	while (running) {
@@ -27,6 +27,7 @@ int read_player_number(game_t* game) {
 		double delta = (SDL_GetTicks() - time) / 1000.0;
 		if (delta < game->max_frequency) continue;
 		time = SDL_GetTicks();
+		
 		mouse_update(game->mouse);
 		bool mouse_click = false;
 		SDL_Event event;
@@ -44,11 +45,23 @@ int read_player_number(game_t* game) {
 				char c = get_pressed_key(event);
 				int text_length = string_size(&box.text);
 
-				if (text_length == 1 && c == SDLK_RETURN) {
-					return atoi(string_data(&box.text));
+				if (text_length > 0 && c == SDLK_RETURN) {
+					svector_push(&players, box.text);
+					if (p_num == player_count) {
+						running = false;
+						break;
+					}
+					p_num++;
+					string_remove(&text, string_size(&text) - 1);
+					string_append(&text, '0' + p_num);
+					label_free(&label);
+					label = label_create(game->renderer, 40, text, white);
+					inputbox_free(&box);
+					box = input_create(game->renderer, 36, SCREEN_WIDTH / 2 - 60, SCREEN_HEIGHT / 2 + 10, 120, NULL, pink);
+					box.active = true;
 				}
-				if (c == '\b') inputbox_update_text(&box, c);
-				else if (text_length == 0 && '2' <= c && c <= '4') inputbox_update_text(&box, c);
+				if (c == SDLK_BACKSPACE) inputbox_update_text(&box, c);
+				else if (text_length < 12) inputbox_update_text(&box, c);
 				break;
 			}
 			}
@@ -58,10 +71,17 @@ int read_player_number(game_t* game) {
 		SDL_SetRenderDrawColor(game->renderer, 91, 47, 115, 255);
 		SDL_RenderClear(game->renderer);
 
-		inputbox_draw(&box);
 		label_draw(&label, SCREEN_WIDTH / 2 - label.rect.w / 2, SCREEN_HEIGHT / 2 - label.rect.h / 2 - 20);
-		mouse_draw(game->renderer, game->mouse);
 
+		inputbox_draw(&box);
+		
+		mouse_draw(game->renderer, game->mouse);
 		SDL_RenderPresent(game->renderer);
 	}
+	
+	label_free(&label);
+	vector_free(&text);
+	inputbox_free(&box);
+
+	return players;
 }

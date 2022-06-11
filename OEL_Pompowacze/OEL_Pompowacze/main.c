@@ -20,10 +20,18 @@
 #include "predictions_graph.h"
 
 void test() {
+	SDL_Window* window = SDL_CreateWindow("OEL Pompowacze:Remake!", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	while (true) {
 
+		inputbox_t box = input_create(renderer, 23, 0, 0, 23, 23, green);
+		for (int i = 0; i < 200; ++i) {
+			inputbox_update_text(&box, 'a');
+		}
+		inputbox_draw(&box);
+		inputbox_free(&box);
 
-
-	
+	}
 	exit(1);
 }
 

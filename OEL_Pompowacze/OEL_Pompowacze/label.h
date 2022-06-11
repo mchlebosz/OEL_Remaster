@@ -24,9 +24,10 @@ label label_create(SDL_Renderer* renderer, int font_size, string s, SDL_Color co
 	SDL_FreeSurface(surface);
 	label res;
 	res.renderer = renderer;
-	res.text = s;
+	res.text = string_create_from_cstring(string_data(&s));
 	res.texture = texture;
 	SDL_QueryTexture(res.texture, NULL, NULL, &res.rect.w, &res.rect.h);
+	TTF_CloseFont(sans);
 	return res;
 }
 
@@ -38,6 +39,7 @@ void label_draw(label* label, int x, int y) {
 
 void label_free(label* label) {
 	SDL_DestroyTexture(label->texture);
+	vector_free(&label->text);
 }
 
 #endif // !LABEL_H

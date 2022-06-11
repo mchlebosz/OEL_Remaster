@@ -112,10 +112,14 @@ void vector_reverse(vector* v)
 
 void _vector_resize(vector* v, int32 delta)
 {
+	int old_size = v->max_size;
 	while (v->size + delta > v->max_size) v->max_size <<= 1;
 	while (v->size + delta < v->max_size / 3 && v->max_size > 8) v->max_size >>= 1;
 
 	v->size += delta;
+	
+	if (old_size == v->max_size) return;
+	
 
 	void* tmp = realloc(v->data, (v->max_size + 1) * v->type_size);
 	if (!tmp) exception_allocation_error();

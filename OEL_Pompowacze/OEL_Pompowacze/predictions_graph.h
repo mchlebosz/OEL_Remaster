@@ -7,7 +7,7 @@
 #include "extended_vector.h"
 #include <stdlib.h>
 
-vector generate_prices(float min_price, float max_price) {
+vector _generate_prices(float min_price, float max_price) {
 	vector prices = fvector_create();
 	
 	float mean_price = (min_price + max_price) / 2;
@@ -36,7 +36,7 @@ vector generate_prices(float min_price, float max_price) {
 	return prices;
 }
 
-void prices_draw(SDL_Renderer* renderer, vector* prices) {
+void _prices_draw(SDL_Renderer* renderer, vector* prices) {
 	for (int i = 0; i < prices->size; ++i) {
 		int w = 25;
 		int x = SCREEN_WIDTH / 2 - prices->size * w / 2 + i * w;
@@ -53,7 +53,7 @@ void prices_loop(game_t* game, vector* prices) {
 	const string subtitle = string_create_from_cstring("PRZYCI$NIJ DOWOLNY KLAWISZ");
 	const label label = label_create(game->renderer, 38, title, white);
 	const struct label sublabel = label_create(game->renderer, 28, subtitle, white);
-	
+
 	const int x = 35;
 	const int y = 20;
 	const int width = SCREEN_WIDTH - x * 2;
@@ -83,14 +83,10 @@ void prices_loop(game_t* game, vector* prices) {
 			}
 		}
 
-		SDL_SetRenderDrawColor(game->renderer, 143, 47, 101, 255);
-		SDL_RenderClear(game->renderer);
-		SDL_Rect subbg_rect = { x, y, width, height };
-		SDL_SetRenderDrawColor(game->renderer, 91, 47, 115, 255);
-		SDL_RenderFillRect(game->renderer, &subbg_rect);
+		game_background_draw(game);
 		
 		// draw graph
-		prices_draw(game->renderer, prices);
+		_prices_draw(game->renderer, prices);
 		SDL_Rect yellow_rect = { x, y, width, label.rect.h - 15 };
 		SDL_SetRenderDrawColor(game->renderer, 204, 191, 69, 255);
 		SDL_RenderFillRect(game->renderer, &yellow_rect);

@@ -19,6 +19,11 @@ vector dvector_create()
     return vector_create(sizeof(float));
 }
 
+vector svector_create()
+{
+    return vector_create(sizeof(string));
+}
+
 void cvector_push(vector* v, char value)
 {
     vector_push(v, &value);
@@ -35,6 +40,11 @@ void fvector_push(vector* v, float value)
 }
 
 void dvector_push(vector* v, double value)
+{
+    vector_push(v, &value);
+}
+
+void svector_push(vector* v, string value)
 {
     vector_push(v, &value);
 }
@@ -57,6 +67,11 @@ float fvector_get(const vector* const v, uint32 index)
 double dvector_get(const vector* const v, uint32 index)
 {
     return *(double*)vector_get(v, index);
+}
+
+string svector_get(const vector* const v, uint32 index)
+{
+    return *(string*)vector_get(v, index);
 }
 
 void ivector_sort(vector* v)

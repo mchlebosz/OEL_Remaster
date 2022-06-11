@@ -24,7 +24,7 @@ typedef struct inputbox inputbox_t;
 inputbox_t input_create(SDL_Renderer* renderer, int font_size, int x, int y, int w, int h, SDL_Color color) {
 	inputbox_t input;
 	input.text = string_create();
-	input.lb = label_create(renderer, font_size, input.text, white);
+	input.lb = label_create(renderer, font_size, string_create(), white);
 	input.active = false;
 	input.lb.rect.x = x;
 	input.lb.rect.y = y;
@@ -44,12 +44,14 @@ void inputbox_update_text(inputbox_t* inputbox, char key) {
 			int remove_index = string_size(&inputbox->text) - 1;
 			if (remove_index >= 0)
 				string_remove(&inputbox->text, remove_index);
+			else
+				return;
 		} else {
 			string_append(&inputbox->text, key);
 		}
 		label_free(&inputbox->lb);
 		SDL_Renderer* renderer = inputbox->lb.renderer;
-		inputbox->lb = label_create(renderer, inputbox->font_size, inputbox->text, inputbox->color);
+		inputbox->lb = label_create(renderer, inputbox->font_size, string_create_from_cstring(string_data(&inputbox->text)), inputbox->color);
 		inputbox->lb.rect.x = inputbox->rect.x;
 		inputbox->lb.rect.y = inputbox->rect.y;
 	}
@@ -68,6 +70,11 @@ void inputbox_draw(inputbox_t* inputbox) {
 	label_draw(&inputbox->lb, inputbox->rect.x + 3, inputbox->rect.y);
 	SDL_SetRenderDrawColor(inputbox->lb.renderer, 255, 255, 255, 255); // draw border
 	SDL_RenderDrawRect(inputbox->lb.renderer, &inputbox->rect);
+}
+
+void inputbox_free(inputbox_t* inputbox) {
+	label_free(&inputbox->lb);
+	vector_free(&inputbox->text);
 }
 
 char get_pressed_key(SDL_Event event) {

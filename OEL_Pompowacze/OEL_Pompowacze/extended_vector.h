@@ -8,6 +8,8 @@
 #include "vector.h"
 #include "algorithms.h"
 
+typedef struct vector string;
+
 // creates char vector (not a string)
 vector cvector_create();
 
@@ -19,6 +21,9 @@ vector fvector_create();
 
 //creates double (long float) vector
 vector dvector_create();
+
+//creates string vector
+vector svector_create();
 
 // push_back char type value
 void cvector_push(vector* v, char value);
@@ -32,6 +37,9 @@ void fvector_push(vector* v, float value);
 // push_back double type value
 void dvector_push(vector* v, double value);
 
+// push_back string type value
+void svector_push(vector* v, string value);
+
 // get_at char type value
 char cvector_get(const vector* const v, uint32 index);
 
@@ -43,6 +51,9 @@ float fvector_get(const vector* const v, uint32 index);
 
 // get_at double type value
 double dvector_get(const vector* const v, uint32 index);
+
+// get_at const string type value
+string svector_get(const vector* const v, uint32 index);
 
 //sorts ascending an integer vector
 void ivector_sort(vector* v);

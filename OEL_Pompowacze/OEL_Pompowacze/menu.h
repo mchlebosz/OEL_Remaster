@@ -16,13 +16,19 @@
 #include "inputbox.h"
 #include "menu_read_player_number.h"
 #include "predictions_graph.h"
+#include "read_player_names.h"
+
 
 void start_loop(game_t* game) {
-	vector pred = generate_prices(1, 4);
-	prices_loop(game, &pred);
 	
 	const int player_number = read_player_number(game);
-	printf("%d", player_number);
+	
+	// reading players' nicknames
+	vector players = read_player_names(game, player_number);
+
+	vector pred = _generate_prices(1, 4);
+	prices_loop(game, &pred);
+
 	bool running = true;
 	double time = SDL_GetTicks();
 
