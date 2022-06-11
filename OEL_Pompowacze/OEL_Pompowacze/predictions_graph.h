@@ -48,10 +48,10 @@ void _prices_draw(SDL_Renderer* renderer, vector* prices) {
 	}
 }
 
-void prices_loop(game_t* game, vector* prices) {
+void draw_predicted_prices_screen(game_t* game, vector* prices) {
 	const string title = string_create_from_cstring("PRZEWIDYWANE CENY ROPY NA RYNKU");
 	const string subtitle = string_create_from_cstring("PRZYCI$NIJ DOWOLNY KLAWISZ");
-	const label label = label_create(game->renderer, 38, title, white);
+	const label_t label = label_create(game->renderer, 38, title, white);
 	const struct label sublabel = label_create(game->renderer, 28, subtitle, white);
 
 	const int x = 35;
@@ -79,6 +79,8 @@ void prices_loop(game_t* game, vector* prices) {
 			if (event.type == SDL_KEYDOWN) {
 				label_free(&label);
 				label_free(&sublabel);
+				vector_free(&title);
+				vector_free(&subtitle);
 				return;
 			}
 		}
@@ -90,6 +92,7 @@ void prices_loop(game_t* game, vector* prices) {
 		SDL_Rect yellow_rect = { x, y, width, label.rect.h - 15 };
 		SDL_SetRenderDrawColor(game->renderer, 204, 191, 69, 255);
 		SDL_RenderFillRect(game->renderer, &yellow_rect);
+		
 		label_draw(&label, SCREEN_WIDTH / 2 - label.rect.w / 2, 10);
 		label_draw(&sublabel, SCREEN_WIDTH / 2 - sublabel.rect.w / 2, label.rect.h);
 

@@ -75,6 +75,11 @@ size_t string_size(const string* const s)
 	return s->size - 1;
 }
 
+string string_copy(const string* s)
+{
+	return string_create_from_cstring(s->data);
+}
+
 
 
 

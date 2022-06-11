@@ -24,5 +24,6 @@ char* string_data(const string* const s);
 char* string_begin(const string* s);
 char* string_end(const string* s);
 size_t string_size(const string* const s);
+string string_copy(const string* s);
 
 #endif // !STRING_H

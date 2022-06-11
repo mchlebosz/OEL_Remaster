@@ -11,6 +11,7 @@
 #define SCREEN_HEIGHT 600
 
 #include "mouse.h"
+#include "menu_factories.h"
 
 struct game {
 	SDL_Window* window;
@@ -19,21 +20,32 @@ struct game {
 	double max_frequency; //  (1/max_fps)
 };
 
+struct player {
+	char* name;
+	int money;
+	factory_drill* drill_fac[4];
+	factory_pump* pump_fac[3];
+	factory_trucks* trucks_fac[3];
+};
+
 typedef struct game game_t;
+typedef struct player player_t;
 
 //
 // colors
-SDL_Color white = { 255,255,255 };
-SDL_Color pink = { 255,0,255 };
-SDL_Color red = { 255,0,0 };
-SDL_Color green = { 0,255,0 };
-SDL_Color blue = { 0,0,255 };
-SDL_Color yellow = { 255,255,0 };
-SDL_Color orange = { 255,165,0 };
-SDL_Color purple = { 128,0,128 };
-SDL_Color brown = { 165,42,42 };
-SDL_Color gray = { 128,128,128 };
-SDL_Color black = { 0,0,0 };
+const SDL_Color white = { 255,255,255 };
+const SDL_Color pink = { 255,0,255 };
+const SDL_Color red = { 255,0,0 };
+const SDL_Color green = { 0,255,0 };
+const SDL_Color blue = { 0,0,255 };
+const SDL_Color yellow = { 255,255,0 };
+const SDL_Color orange = { 255,165,0 };
+const SDL_Color purple = { 128,0,128 };
+const SDL_Color brown = { 165,42,42 };
+const SDL_Color gray = { 128,128,128 };
+const SDL_Color black = { 0,0,0 };
+const SDL_Color internal_bg_color = { 91, 47, 115 };
+const SDL_Color external_bg_color = { 143, 47, 101 };
 
 void game_background_draw(game_t* game) {
 	const int x = 35;

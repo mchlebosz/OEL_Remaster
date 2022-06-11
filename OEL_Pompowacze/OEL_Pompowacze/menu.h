@@ -15,81 +15,58 @@
 #include "button.h"
 #include "inputbox.h"
 #include "menu_read_player_number.h"
+#include "menu_read_player_names.h"
 #include "predictions_graph.h"
-#include "read_player_names.h"
+#include "menu_factories.h"
+#include "menu_player_options_screen.h"
 
+
+void array_toupper(char* data) {
+	int i = 0;
+	while (data[i] != '\0') {
+		data[i] = toupper(data[i]);
+		i++;
+	}
+}
+
+player_t* init_players(vector* names) {
+	player_t *players = malloc(sizeof(player_t) * names->size);
+	for (int i = 0; i < names->size; ++i) {
+		string name = svector_get(names, i);
+		players[i].name = string_data(&name);
+		array_toupper(players[i].name);
+		players[i].money = 30000;
+		memset(players[i].drill_fac, NULL, sizeof(factory_drill*) * 4);
+		memset(players[i].pump_fac, NULL, sizeof(factory_pump*) * 3);
+		memset(players[i].trucks_fac, NULL, sizeof(factory_trucks*) * 3);
+	}
+	return players;
+}
 
 void start_loop(game_t* game) {
 	
-	const int player_number = read_player_number(game);
+	// const int players_count = read_player_number(game);
+	const int players_count = 1;
 	
 	// reading players' nicknames
-	vector players = read_player_names(game, player_number);
-
-	vector pred = _generate_prices(1, 4);
-	prices_loop(game, &pred);
-
+	vector names = read_player_names(game, players_count);
+	player_t* players = init_players(&names); // players' structures, size=players_count
+	
+	vector pred = _generate_prices(0.1, 2.1); // in dollars $$$
+	// draw_predicted_prices_screen(game, &pred);
+	
 	bool running = true;
-	double time = SDL_GetTicks();
-
-	string s = string_create_from_cstring("dodaj gracza!");
-	button_t b = button_create(game->renderer, s, 30, SCREEN_WIDTH / 2 - 100, SCREEN_HEIGHT / 2, green);
-	inputbox_t box = input_create(game->renderer, 26, 70, 70, 100, 100, green);
+	int i = 0;
 
 	while (running) {
-		// refreshrate cap
-		double delta = (SDL_GetTicks() - time) / 1000.0;
-		if (delta < game->max_frequency) continue;
-		time = SDL_GetTicks();
+		const int current_player = i % players_count;
+		const int year = i / players_count;
+		i++;
+		byte option = draw_main_menu_screen(game, players, current_player);
 
-		mouse_update(game->mouse);
-
-		// handle events
-		bool mouse_click = false;
-		SDL_Event event;
-		while (SDL_PollEvent(&event)) {
-			switch (event.type) {
-			case SDL_QUIT:
-				running = false;
-				break;
-			case SDL_MOUSEBUTTONDOWN:
-				mouse_click = true;
-				break;
-			case SDL_KEYUP: {
-				char c = get_pressed_key(event);
-
-				inputbox_update_text(&box, c);
-				break;
-			}
-			}
-		}
-		uint8_t* key = SDL_GetKeyboardState(0); // keys down
-
-
-
-		button_update(&b, game->mouse);
-		inputbox_update(&box, game->mouse, mouse_click);
-
-
-		if (b.is_selected && mouse_click) {
-			printf("button clicked\n");
-		}
-
-		if (box.active) {
-
-		}
-
-
-		// clear renderer
-		SDL_SetRenderDrawColor(game->renderer, 0, 0, 0, 255);
-		SDL_RenderClear(game->renderer);
-
-		button_draw(&b);
-		inputbox_draw(&box);
-
-		mouse_draw(game->renderer, game->mouse);
-
-		SDL_RenderPresent(game->renderer);
+		if (option == -1) continue;
+		
+		
 	}
 	SDL_DestroyTexture(b.txt);
 

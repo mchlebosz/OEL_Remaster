@@ -10,7 +10,7 @@
 #include "string.h"
 
 struct inputbox {
-	label lb;
+	label_t lb;
 	string text;
 	bool active;
 	int font_size;
@@ -24,7 +24,7 @@ typedef struct inputbox inputbox_t;
 inputbox_t input_create(SDL_Renderer* renderer, int font_size, int x, int y, int w, int h, SDL_Color color) {
 	inputbox_t input;
 	input.text = string_create();
-	input.lb = label_create(renderer, font_size, string_create(), white);
+	input.lb = label_create(renderer, font_size, string_create(), color);
 	input.active = false;
 	input.lb.rect.x = x;
 	input.lb.rect.y = y;

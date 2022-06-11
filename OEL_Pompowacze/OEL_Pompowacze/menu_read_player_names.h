@@ -10,15 +10,18 @@
 #include "inputbox.h"
 
 vector read_player_names(game_t* game, int player_count) {
-
+	const int x = 35;
+	const int y = 20;
+	const int width = SCREEN_WIDTH - x * 2;
+	const int height = SCREEN_HEIGHT - y * 2;
 	int p_num = 1;
 	vector players = svector_create();
 
 	SDL_Color bgcolor = { 91, 47, 115 };
-	inputbox_t box = input_create(game->renderer, 36, SCREEN_WIDTH / 2 - 60, SCREEN_HEIGHT / 2 + 10, 120, NULL, pink);
+	inputbox_t box = input_create(game->renderer, 36, SCREEN_WIDTH / 2 - 110, SCREEN_HEIGHT / 2 + 10, 220, NULL, pink);
 	box.active = true;
 	string text = string_create_from_cstring("nazwa gracza nr 1");
-	label label = label_create(game->renderer, 40, text, white);
+	label_t label = label_create(game->renderer, 40, text, white);
 	
 	bool running = true;
 	double time = SDL_GetTicks();
@@ -46,7 +49,7 @@ vector read_player_names(game_t* game, int player_count) {
 				int text_length = string_size(&box.text);
 
 				if (text_length > 0 && c == SDLK_RETURN) {
-					svector_push(&players, box.text);
+					svector_push(&players, string_copy(&box.text));
 					if (p_num == player_count) {
 						running = false;
 						break;
@@ -68,9 +71,12 @@ vector read_player_names(game_t* game, int player_count) {
 		}
 
 		inputbox_update(&box, game->mouse, mouse_click);
-		SDL_SetRenderDrawColor(game->renderer, 91, 47, 115, 255);
-		SDL_RenderClear(game->renderer);
+		game_background_draw(game);
 
+		// draw yellow rect
+		SDL_Rect yellow_rect = { x, label.rect.y + 7, width, label.rect.h - 8 };
+		SDL_SetRenderDrawColor(game->renderer, 204, 191, 69, 255);
+		SDL_RenderFillRect(game->renderer, &yellow_rect);
 		label_draw(&label, SCREEN_WIDTH / 2 - label.rect.w / 2, SCREEN_HEIGHT / 2 - label.rect.h / 2 - 20);
 
 		inputbox_draw(&box);

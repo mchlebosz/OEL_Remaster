@@ -15,29 +15,37 @@ struct label {
 	SDL_Rect rect;
 };
 
-typedef struct label label;
+typedef struct label label_t;
 
-label label_create(SDL_Renderer* renderer, int font_size, string s, SDL_Color color) {
+label_t label_create(SDL_Renderer* renderer, int font_size, string s, SDL_Color color) {
 	TTF_Font* sans = TTF_OpenFont("Sans.ttf", font_size);
 	SDL_Surface* surface = TTF_RenderText_Solid(sans, string_data(&s), color);
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
 	SDL_FreeSurface(surface);
-	label res;
+	label_t res;
 	res.renderer = renderer;
-	res.text = string_create_from_cstring(string_data(&s));
+	res.text = string_copy(&s);
 	res.texture = texture;
 	SDL_QueryTexture(res.texture, NULL, NULL, &res.rect.w, &res.rect.h);
 	TTF_CloseFont(sans);
 	return res;
 }
 
-void label_draw(label* label, int x, int y) {
+void label_draw(label_t* label, int x, int y) {
 	label->rect.x = x;
 	label->rect.y = y;
 	SDL_RenderCopy(label->renderer, label->texture, NULL, &label->rect);
 }
 
-void label_free(label* label) {
+void label_draw_on_rect(label_t* label, int x, int y, SDL_Color bg_color) {
+	label->rect.x = x;
+	label->rect.y = y;
+	SDL_SetRenderDrawColor(label->renderer, bg_color.r, bg_color.g, bg_color.b, bg_color.a);
+	SDL_RenderFillRect(label->renderer, &label->rect);
+	SDL_RenderCopy(label->renderer, label->texture, NULL, &label->rect);
+}
+
+void label_free(label_t* label) {
 	SDL_DestroyTexture(label->texture);
 	vector_free(&label->text);
 }

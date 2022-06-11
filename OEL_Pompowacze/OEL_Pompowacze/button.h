@@ -35,7 +35,7 @@ button_t button_create_from_image(SDL_Renderer* renderer, char* path, int x, int
 }
 
 button_t button_create(SDL_Renderer* renderer, string s, int font_size, int x, int y, SDL_Color text_color) {
-	label lb = label_create(renderer, font_size, s, text_color);
+	label_t lb = label_create(renderer, font_size, s, text_color);
 	button_t button;
 	button.renderer = renderer;
 	button.is_selected = false;
@@ -63,5 +63,8 @@ void button_draw(button_t* button) {
 	// SDL_RenderDrawRect(button->renderer, &button->rect);
 }
 
+void button_free(button_t* button) {
+	SDL_DestroyTexture(button->txt);
+}
 
 #endif // !BUTTON_H
