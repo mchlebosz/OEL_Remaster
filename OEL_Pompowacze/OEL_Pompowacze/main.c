@@ -2,7 +2,7 @@
 // This should display a pink screen for 2 seconds
 // compile with: clang++ main.cpp -o hello_sdl2 -lSDL2
 // run with: ./hello_sdl2
-
+#define _CRT_SECURE_NO_WARNINGS
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <SDL_image.h>

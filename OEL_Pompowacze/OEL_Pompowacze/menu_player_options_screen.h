@@ -20,8 +20,13 @@ byte draw_main_menu_screen(game_t* game, player_t* players, int current_player) 
 	
 	// create strings
 	const string s_title = string_create_from_cstring("DECYZJA NALEZY DO CIEBIE!");
-	string s_player_name = string_create_from_cstring("GRACZ: ");
+	string s_player_name = string_create_from_cstring("GRACZ:  ");
 	string_append_range(&s_player_name, players[current_player].name);
+	string_append_range(&s_player_name, "    $= ");
+	char buff[32];
+	sprintf(buff, "%d", players[current_player].money);
+	string_append_range(&s_player_name, buff);
+
 	const string s_buying = string_create_from_cstring("  KUPOWANIE  ");
 	const string s_drill_factories = string_create_from_cstring("FABRYKI WIERTEŁ");
 	const string s_pump_factories = string_create_from_cstring("ZAKŁADY POMP");
@@ -30,7 +35,7 @@ byte draw_main_menu_screen(game_t* game, player_t* players, int current_player) 
 	const string s_pumps = string_create_from_cstring("POMPY");
 	const string s_trucks = string_create_from_cstring("TIRY");
 	const string s_other_options = string_create_from_cstring("  POZOSTAŁE MOZLIWO$CI  ");
-	const string s_next_player = string_create_from_cstring("POMIŃ TURE");
+	const string s_next_player = string_create_from_cstring("POMIN TURE");
 	
 	// create labels
 	const label_t title_label = label_create(game->renderer, 32, s_title, white);
@@ -45,7 +50,7 @@ byte draw_main_menu_screen(game_t* game, player_t* players, int current_player) 
 	const button_t drills_btn = button_create(game->renderer, s_drills, 32, 100, 272, white);
 	const button_t pumps_btn = button_create(game->renderer, s_pumps, 32, 100, 304, black);
 	const button_t trucks_btn = button_create(game->renderer, s_trucks, 32, 100, 336, white);
-	const button_t next_player_btn = button_create(game->renderer, s_next_player, 32, 100, 412, black);
+	const button_t next_player_btn = button_create(game->renderer, s_next_player, 32, 100, 422, black);
 
 	const SDL_Color cool_yellow = { 204, 191, 69 };
 
@@ -104,7 +109,7 @@ byte draw_main_menu_screen(game_t* game, player_t* players, int current_player) 
 		label_draw_on_rect(&title_label, 100, 30, cool_yellow);
 		label_draw(&player_name_label, 100, 72);
 		label_draw_on_rect(&buying_label, 100, 142, external_bg_color);
-		label_draw_on_rect(&other_options_label, 100, 378, external_bg_color);
+		label_draw_on_rect(&other_options_label, 100, 388, external_bg_color);
 		
 		// draw buttons
 		button_draw(&drill_fac_btn);

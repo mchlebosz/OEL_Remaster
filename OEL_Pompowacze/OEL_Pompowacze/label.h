@@ -40,8 +40,11 @@ void label_draw(label_t* label, int x, int y) {
 void label_draw_on_rect(label_t* label, int x, int y, SDL_Color bg_color) {
 	label->rect.x = x;
 	label->rect.y = y;
+	SDL_Rect rect = label->rect;
+	rect.h = rect.h * 8 / 10;
+	rect.y = rect.y + rect.h / 7;
 	SDL_SetRenderDrawColor(label->renderer, bg_color.r, bg_color.g, bg_color.b, bg_color.a);
-	SDL_RenderFillRect(label->renderer, &label->rect);
+	SDL_RenderFillRect(label->renderer, &rect);
 	SDL_RenderCopy(label->renderer, label->texture, NULL, &label->rect);
 }
 

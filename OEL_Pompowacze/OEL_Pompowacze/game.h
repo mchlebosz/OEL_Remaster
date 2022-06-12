@@ -11,7 +11,7 @@
 #define SCREEN_HEIGHT 600
 
 #include "mouse.h"
-#include "menu_factories.h"
+#include "factories.h"
 
 struct game {
 	SDL_Window* window;
@@ -23,9 +23,9 @@ struct game {
 struct player {
 	char* name;
 	int money;
-	factory_drill* drill_fac[4];
-	factory_pump* pump_fac[3];
-	factory_trucks* trucks_fac[3];
+	factory_t* drill_fac[4];
+	factory_t* pump_fac[3];
+	factory_t* trucks_fac[3];
 };
 
 typedef struct game game_t;

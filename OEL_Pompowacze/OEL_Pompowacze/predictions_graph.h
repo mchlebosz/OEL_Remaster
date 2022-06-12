@@ -41,7 +41,7 @@ void _prices_draw(SDL_Renderer* renderer, vector* prices) {
 		int w = 25;
 		int x = SCREEN_WIDTH / 2 - prices->size * w / 2 + i * w;
 		int y = SCREEN_HEIGHT / 2 + 220;
-		int h = fvector_get(prices, i) * -100;
+		int h = fvector_get(prices, i) * -200;
 		SDL_Rect rect = {x, y, w, h};
 		SDL_SetRenderDrawColor(renderer, 143, 47, 101, 255);
 		SDL_RenderFillRect(renderer, &rect);
