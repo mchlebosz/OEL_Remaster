@@ -75,7 +75,7 @@ void start_loop(game_t* game) {
 	};
 
 	factory_t drill_factories[3] = {
-		{ "TURBOWIERT   ", 57, rand() % 10000 + 40000, -1, -1 },
+		{ "TURBOWIERT", 57, rand() % 10000 + 40000, -1, -1 },
 		{ "NA B£YSK INC.", 57, rand() % 10000 + 40000, -1, -1 },
 		{ "PET SHOP&BOYS", 49, rand() % 8000 + 30000, -1, -1 }
 	};
@@ -88,9 +88,12 @@ void start_loop(game_t* game) {
 		const int year = i / players_count;
 		i++;
 		byte option = draw_main_menu_screen(game, players, current_player);
-		byte id = draw_buy_factory_screen(game, players, current_player, drill_factories, 3, factory_buying_colors[current_player], titles[current_player]);
-		if (option == -1) continue;
-		
+		switch (option) {
+			case 0: {
+				byte id = draw_buy_factory_screen(game, players, current_player, drill_factories, 3, factory_buying_colors[current_player], titles[current_player]);
+				if (option == -1) continue;
+			}		
+		}
 		
 	}
 }

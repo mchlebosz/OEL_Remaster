@@ -13,6 +13,9 @@
 #include "mouse.h"
 #include "factories.h"
 
+#pragma warning(disable:6386)
+#pragma warning(disable:6385)
+
 struct game {
 	SDL_Window* window;
 	SDL_Renderer* renderer;
