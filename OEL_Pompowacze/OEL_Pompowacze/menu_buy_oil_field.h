@@ -11,7 +11,12 @@
 #include "factories.h"
 #include "menu_buy_factory_screen.h"
 
-
+string int2string(int n) {
+	char buff[32];
+	memset(buff, NULL, 32 * sizeof(char));
+	sprintf(buff, "%d", n);
+	return string_create_from_cstring(buff);
+}
 // returns bought factory id
 byte menu_buy_oil_field(game_t* game, player_t* players, int current_player, factory_t* oil_fields, int field_count, SDL_Color bgcolor) {
 	bool running = true;
@@ -20,6 +25,13 @@ byte menu_buy_oil_field(game_t* game, player_t* players, int current_player, fac
 	const int y = 20;
 	const int width = SCREEN_WIDTH - x * 2;
 	const int height = SCREEN_HEIGHT - y * 2;
+	string s_no = string_create_from_cstring("NR");
+	string s_company = string_create_from_cstring("FIRMA");
+	string s_cost = string_create_from_cstring("CENA");
+
+	label_t id_label = label_create(game->renderer, 36, s_no, white);
+	label_t name_label = label_create(game->renderer, 36, s_company, white);
+	label_t cost_label = label_create(game->renderer, 36, s_cost, white);
 	string title = string_create_from_cstring("SPRZEDAZ PÓL NAFTOWYCH");
 	string* s_ids = (string*)malloc(sizeof(string) * field_count);
 	string* s_names = (string*)malloc(sizeof(string) * field_count);
@@ -27,6 +39,12 @@ byte menu_buy_oil_field(game_t* game, player_t* players, int current_player, fac
 	string s_exit = string_create_from_cstring("POMIN TURE");
 	string spaces = string_create_from_cstring("                                                                           ");
 	string s_dollar = string_create_from_cstring("$");
+	string s_current_money = string_create_from_cstring("AKTUALNY KAPITAL: ");
+	{
+		string tmp = int2string(players[current_player].money);
+		string_append_range(&s_current_money, string_data(&tmp));
+		string_append_range(&s_current_money, " $");
+	}
 	button_t* buttons = (button_t*)malloc(sizeof(button_t) * field_count);
 	button_t exit_btn = button_create(game->renderer, s_exit, 36, 150, 500, white);
 	label_t* id_labels = (label_t*)malloc(sizeof(label_t) * field_count);
@@ -34,7 +52,7 @@ byte menu_buy_oil_field(game_t* game, player_t* players, int current_player, fac
 	label_t* cost_labels = (label_t*)malloc(sizeof(label_t) * field_count);
 	label_t dollar_label = label_create(game->renderer, 36, s_dollar, bgcolor);
 	label_t title_label = label_create(game->renderer, 36, title, bgcolor);
-
+	label_t current_money_label = label_create(game->renderer, 36, s_current_money, purple);
 
 	const int y_begin = 150;
 
@@ -59,6 +77,7 @@ byte menu_buy_oil_field(game_t* game, player_t* players, int current_player, fac
 	}
 
 	byte option = -1;
+	const SDL_Rect yellow_rect = { 0,0, SCREEN_WIDTH, 60 };
 
 	while (running) {
 		// refreshrate cap
@@ -106,8 +125,13 @@ byte menu_buy_oil_field(game_t* game, player_t* players, int current_player, fac
 		SDL_SetRenderDrawColor(game->renderer, bgcolor.r, bgcolor.g, bgcolor.b, 255);
 		SDL_RenderClear(game->renderer);
 
-		_draw_title_rectangle(&title_label);
+		SDL_SetRenderDrawColor(game->renderer, 214, 223, 123, 255);
+		SDL_RenderFillRect(game->renderer, &yellow_rect);
 
+		label_draw(&title_label, 80, 18);
+		label_draw(&id_label, 50, 110);
+		label_draw(&name_label, 110, 110);
+		label_draw(&cost_label, 595, 110);
 		for (int i = 0; i < field_count; ++i) {
 			const SDL_Color color = oil_fields[i].player_id == -1 ? white : gray;
 			button_draw(&buttons[i]);
@@ -117,7 +141,8 @@ byte menu_buy_oil_field(game_t* game, player_t* players, int current_player, fac
 			label_draw_on_rect(&dollar_label, 720, y_begin + y + i * 40, color);
 		}
 		button_draw(&exit_btn);
-
+		label_draw(&current_money_label, 100, 450);
+		
 		mouse_draw(game->renderer, game->mouse);
 		SDL_RenderPresent(game->renderer);
 	}
@@ -132,6 +157,12 @@ byte menu_buy_oil_field(game_t* game, player_t* players, int current_player, fac
 		label_free(&name_labels[i]);
 		label_free(&cost_labels[i]);
 	}
+	label_free(&id_label);
+	label_free(&name_label);
+	label_free(&cost_label);
+	vector_free(&s_no);
+	vector_free(&s_company);
+	vector_free(&s_cost);
 	free(buttons);
 	free(s_ids);
 	free(s_names);

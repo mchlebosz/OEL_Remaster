@@ -104,6 +104,9 @@
     <ClInclude Include="menu_buy_oil_field.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="menu_end_of_year.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="drill_factories.txt" />

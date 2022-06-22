@@ -116,12 +116,12 @@ void _pump_oil(player_t* player, factory_t* oil_field) {
 		player->pumps--;
 	}
 
+	printf("{to pump: %d}\n", oil_field->cost);
 
 	if (oil_field->buffer == 0) {
 		oil_field->cost--;
 		player->oil += 8000 + 2000 * (rand() % 4);
 	}
-	printf("{to pump: %d}\n", oil_field->cost);
 }
 
 void players_dig_oil_fields(player_t* players, int player_count) {
