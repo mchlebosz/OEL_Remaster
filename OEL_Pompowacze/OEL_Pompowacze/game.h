@@ -29,6 +29,9 @@ struct player {
 	factory_t* drill_fac[4];
 	factory_t* pump_fac[3];
 	factory_t* trucks_fac[3];
+	int drills;
+	int pumps;
+	int trucks;
 };
 
 typedef struct game game_t;

@@ -9,7 +9,7 @@
 #include "button.h"
 #include "inputbox.h"
 #include "factories.h"
-
+#include "menu_set_item_cost.h"
 
 void _draw_title_rectangle(label_t* label) {
 	SDL_Rect rect = {
@@ -38,15 +38,18 @@ byte draw_buy_factory_screen(game_t* game, player_t* players, int current_player
 	string* s_names = (string*)malloc(sizeof(string) * factory_count);
 	string* s_counts = (string*)malloc(sizeof(string) * factory_count);
 	string* s_costs = (string*)malloc(sizeof(string) * factory_count);
+	string s_exit = string_create_from_cstring("POMIN TURE");
 	string spaces = string_create_from_cstring("                                                                           ");
 	string s_dollar = string_create_from_cstring("$");
 	button_t* buttons = (button_t*)malloc(sizeof(button_t) * factory_count);
+	button_t exit_btn = button_create(game->renderer, s_exit, 36, 150, 500, white);
 	label_t* id_labels = (label_t*)malloc(sizeof(label_t) * factory_count);
 	label_t* name_labels = (label_t*)malloc(sizeof(label_t) * factory_count);
 	label_t* count_labels = (label_t*)malloc(sizeof(label_t) * factory_count);
 	label_t* cost_labels = (label_t*)malloc(sizeof(label_t) * factory_count);
 	label_t dollar_label = label_create(game->renderer, 36, s_dollar, bgcolor);
 	label_t title_label = label_create(game->renderer, 36, title, bgcolor);
+
 
 	int y_begin = 200;
 
@@ -105,10 +108,21 @@ byte draw_buy_factory_screen(game_t* game, player_t* players, int current_player
 		
 		for (int i = 0; i < factory_count; ++i) {
 			if (buttons[i].is_selected && mouse_click) {
+				if (factories[i].player_id != -1) continue;
+				if (players[current_player].money < factories[i].cost) continue;
+				int cost = menu_set_item_cost(game, bgcolor, "PODAJ CENE ZA JEDNA SZTUKE:");
+				factories[i].cost_per_item = cost;
 				option = i;
 				running = false;
 				break;
 			}
+		}
+		
+		button_update(&exit_btn, game->mouse);
+		if (exit_btn.is_selected && mouse_click) {
+			option = -1;
+			running = false;
+			break;
 		}
 
 		SDL_SetRenderDrawColor(game->renderer, bgcolor.r, bgcolor.g, bgcolor.b, 255);
@@ -125,6 +139,7 @@ byte draw_buy_factory_screen(game_t* game, player_t* players, int current_player
 			label_draw_on_rect(&cost_labels[i], 595, y_begin + y + i * 40, color);
 			label_draw_on_rect(&dollar_label, 720, y_begin + y + i * 40, color);
 		}
+		button_draw(&exit_btn);
 
 		mouse_draw(game->renderer, game->mouse);
 		SDL_RenderPresent(game->renderer);
@@ -156,6 +171,10 @@ byte draw_buy_factory_screen(game_t* game, player_t* players, int current_player
 	vector_free(&spaces);
 	// DO NOT FREE TITLE! vector_free(&title);
 	label_free(&title_label);
+	button_free(&exit_btn);
+	vector_free(&s_exit);
+
+
 
 	return option;
 }	

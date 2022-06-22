@@ -163,10 +163,12 @@
     <ClInclude Include="game.h" />
     <ClInclude Include="inputbox.h" />
     <ClInclude Include="menu.h" />
-    <ClInclude Include="menu_buy_drill_factory_screen.h" />
+    <ClInclude Include="menu_buy_factory_screen.h" />
     <ClInclude Include="factories.h" />
+    <ClInclude Include="menu_buy_item_from_factory.h" />
     <ClInclude Include="menu_player_options_screen.h" />
     <ClInclude Include="menu_read_player_number.h" />
+    <ClInclude Include="menu_set_item_cost.h" />
     <ClInclude Include="mouse.h" />
     <ClInclude Include="predictions_graph.h" />
     <ClInclude Include="menu_read_player_names.h" />

@@ -14,7 +14,7 @@ struct factory {
 	char* name;
 	int items_left;
 	int cost;
-	int cost_per_drill;
+	int cost_per_item;
 	int player_id;
 };
 
