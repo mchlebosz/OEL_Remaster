@@ -53,7 +53,7 @@ void button_update(button_t* button, mouse_t* mouse) {
 		&& button->rect.y <= y && y <= button->rect.y + button->rect.h;
 }
 
-void button_draw(button_t* button) {
+void button_draw(const button_t* button) {
 	// SDL_SetRenderDrawColor(button->renderer, 125, 0, 125, 255); // fill button inside
 	// SDL_RenderFillRect(button->renderer, &button->rect);
 
@@ -63,7 +63,7 @@ void button_draw(button_t* button) {
 	// SDL_RenderDrawRect(button->renderer, &button->rect);
 }
 
-void button_free(button_t* button) {
+void button_free(const button_t* button) {
 	SDL_DestroyTexture(button->txt);
 }
 

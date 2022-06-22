@@ -31,10 +31,11 @@ label_t label_create(SDL_Renderer* renderer, int font_size, string s, SDL_Color 
 	return res;
 }
 
-void label_draw(label_t* label, int x, int y) {
-	label->rect.x = x;
-	label->rect.y = y;
-	SDL_RenderCopy(label->renderer, label->texture, NULL, &label->rect);
+void label_draw(const label_t* label, int x, int y) {
+	SDL_Rect rect = label->rect;
+	rect.x = x;
+	rect.y = y;
+	SDL_RenderCopy(label->renderer, label->texture, NULL, &rect);
 }
 
 void label_draw_on_rect(label_t* label, int x, int y, SDL_Color bg_color) {

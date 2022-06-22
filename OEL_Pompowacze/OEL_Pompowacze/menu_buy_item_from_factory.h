@@ -10,7 +10,7 @@
 #include "inputbox.h"
 #include "factories.h"
 
-byte menu_buy_item(game_t* game, player_t* players, int current_player, factory_t* factories, int factory_count, SDL_Color bgcolor, string title) {
+byte menu_buy_item(game_t* game, player_t* players, int current_player, factory_t* factories, int factory_count, SDL_Color bgcolor, string title, int fac_type) {
 
 	bool running = true;
 	double time = SDL_GetTicks();
@@ -96,27 +96,49 @@ byte menu_buy_item(game_t* game, player_t* players, int current_player, factory_
 		}
 
 		// update
-
+		button_update(&exit_btn, game->mouse);
 		for (int i = 0; i < factory_count; ++i) {
 			button_update(&buttons[i], game->mouse);
 		}
 
-		for (int i = 0; i < factory_count; ++i) {
-			if (buttons[i].is_selected && mouse_click) { // buy items
-				if (factories[i].player_id == -1) continue;
-				int count = INT_MAX >> 10;
-				while (count * factories[i].cost_per_item > players[current_player].money || count > factories[i].items_left) {
-					count = menu_set_item_cost(game, bgcolor, "ILE SZTUK CHCESZ KUPIC? :");
+		if (mouse_click) {
+			for (int i = 0; i < factory_count; ++i) {
+				if (buttons[i].is_selected) { // buy items
+					if (factories[i].player_id == -1) continue;
+					int count = INT_MAX >> 10;
+					while (count * factories[i].cost_per_item > players[current_player].money || count > factories[i].items_left) {
+						count = menu_set_item_cost(game, bgcolor, "ILE SZTUK CHCESZ KUPIC? :");
+					}
+					factories[i].items_left -= count;	// transfer items
+
+					switch (fac_type) {
+					case DRILL:
+						players[current_player].drills += count;
+						break;
+					case PUMP:
+						players[current_player].pumps += count;
+						break;
+					case TRUCK:
+						players[current_player].trucks += count;
+						break;
+					}
+
+					int total_cost = count * factories[i].cost_per_item; // transfer money
+					players[current_player].money -= total_cost;
+					players[factories[i].player_id].money += total_cost;
+
+					option = i;
+					running = false;
+					break;
 				}
-				factories[i].items_left -= count;
-				players[current_player].drills += count;
-				players[current_player].money -= count * factories[i].cost_per_item;
-				option = i;
+			}
+			if (exit_btn.is_selected) {
 				running = false;
+				option = -1;
 				break;
 			}
 		}
-
+		
 
 		// draw
 		game_background_draw(game);
@@ -125,7 +147,7 @@ byte menu_buy_item(game_t* game, player_t* players, int current_player, factory_
 		label_draw(&name_label, 110, 150);
 		label_draw(&count_label, 430, 150);
 		label_draw(&cost_label, 595, 150);
-
+		
 		const int y_begin = 200;
 		for (int i = 0, j = 0; i < factory_count; ++i) {
 			if (factories[i].player_id == -1) continue;
@@ -137,7 +159,7 @@ byte menu_buy_item(game_t* game, player_t* players, int current_player, factory_
 			label_draw_on_rect(&dollar_label, 720, y_begin + y + j * 40, white);
 			j++;
 		}
-
+		button_draw(&exit_btn);
 		mouse_draw(game->renderer, game->mouse);
 		SDL_RenderPresent(game->renderer);
 	}

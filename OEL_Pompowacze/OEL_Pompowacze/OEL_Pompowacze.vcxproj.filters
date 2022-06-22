@@ -101,10 +101,14 @@
     <ClInclude Include="menu_set_item_cost.h">
       <Filter>Pliki nagłówkowe</Filter>
     </ClInclude>
+    <ClInclude Include="menu_buy_oil_field.h">
+      <Filter>Pliki nagłówkowe</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="drill_factories.txt" />
     <Text Include="pump_factories.txt" />
     <Text Include="truck_factories.txt" />
+    <Text Include="oil_fields.txt" />
   </ItemGroup>
 </Project>

@@ -166,6 +166,7 @@
     <ClInclude Include="menu_buy_factory_screen.h" />
     <ClInclude Include="factories.h" />
     <ClInclude Include="menu_buy_item_from_factory.h" />
+    <ClInclude Include="menu_buy_oil_field.h" />
     <ClInclude Include="menu_player_options_screen.h" />
     <ClInclude Include="menu_read_player_number.h" />
     <ClInclude Include="menu_set_item_cost.h" />
@@ -178,6 +179,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="drill_factories.txt" />
+    <Text Include="oil_fields.txt" />
     <Text Include="pump_factories.txt" />
     <Text Include="truck_factories.txt" />
   </ItemGroup>

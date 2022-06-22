@@ -18,7 +18,7 @@ vector read_player_names(game_t* game, int player_count) {
 	vector players = svector_create();
 
 	SDL_Color bgcolor = { 91, 47, 115 };
-	inputbox_t box = input_create(game->renderer, 36, SCREEN_WIDTH / 2 - 110, SCREEN_HEIGHT / 2 + 10, 220, NULL, pink);
+	inputbox_t box = input_create(game->renderer, 36, SCREEN_WIDTH / 2 - 110, SCREEN_HEIGHT / 2 + 10, 220, 0, pink);
 	box.active = true;
 	string text = string_create_from_cstring("nazwa gracza nr 1");
 	label_t label = label_create(game->renderer, 40, text, white);
@@ -46,7 +46,7 @@ vector read_player_names(game_t* game, int player_count) {
 				break;
 			case SDL_KEYDOWN: {
 				char c = get_pressed_key(event);
-				int text_length = string_size(&box.text);
+				int text_length = (int)string_size(&box.text);
 
 				if (text_length > 0 && c == SDLK_RETURN) {
 					svector_push(&players, string_copy(&box.text));
@@ -60,10 +60,11 @@ vector read_player_names(game_t* game, int player_count) {
 					label_free(&label);
 					label = label_create(game->renderer, 40, text, white);
 					inputbox_free(&box);
-					box = input_create(game->renderer, 36, SCREEN_WIDTH / 2 - 60, SCREEN_HEIGHT / 2 + 10, 120, NULL, pink);
+					box = input_create(game->renderer, 36, SCREEN_WIDTH / 2 - 60, SCREEN_HEIGHT / 2 + 10, 120, 0, pink);
 					box.active = true;
 				}
-				if (c == SDLK_BACKSPACE) inputbox_update_text(&box, c);
+				if (c == SDLK_RETURN) { }
+				else if (c == SDLK_BACKSPACE) inputbox_update_text(&box, c);
 				else if (text_length < 12) inputbox_update_text(&box, c);
 				break;
 			}

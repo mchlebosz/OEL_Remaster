@@ -7,7 +7,8 @@
 enum factory_type {
 	DRILL,
 	PUMP,
-	TRUCK
+	TRUCK,
+	OIL,
 };
 
 struct factory {
@@ -16,6 +17,7 @@ struct factory {
 	int cost;
 	int cost_per_item;
 	int player_id;
+	int buffer;
 };
 
 typedef struct factory factory_t;
@@ -23,7 +25,7 @@ typedef struct factory factory_t;
 void read_line(FILE* file, char line[32]) {
 	fgets(line, 32, file);
 	for (int i = 0; i < 32; ++i) {
-		if (line[i] > 127) line[i] = (char)((int)line[i] - 256);
+		if (line[i] == '\n') line[i] = '\0';
 	}
 	line[31] = '\0';
 }
@@ -52,12 +54,16 @@ void _load_random_names_from_file(FILE* file, factory_t* factories, int count) {
 		selected[index] = true;
 
 		factories[i].name = (char*)malloc(16 * sizeof(char));
+		if (factories[i].name == NULL) {
+			printf("ALLOCATION ERROR");
+			exit(-1);
+		}
 		memset(factories[i].name, 0, 16 * sizeof(char));
 		strcpy(factories[i].name, buff[index]);
 	}
 }
 
-void load_factory_names_from_file(factory_t drill_factories[3], factory_t pump_factories[3], factory_t truck_factories[3]) {
+void load_factory_names_from_file(factory_t drill_factories[3], factory_t pump_factories[3], factory_t truck_factories[3], factory_t oil_fields[6]) {
 	FILE* file = fopen("drill_factories.txt", "rt");
 	_load_random_names_from_file(file, drill_factories, 3);
 	fclose(file);
@@ -68,6 +74,10 @@ void load_factory_names_from_file(factory_t drill_factories[3], factory_t pump_f
 
 	file = fopen("truck_factories.txt", "rt");
 	_load_random_names_from_file(file, truck_factories, 3);
+	fclose(file);
+
+	file = fopen("oil_fields.txt", "rt");
+	_load_random_names_from_file(file, oil_fields, 6);
 	fclose(file);
 }
 

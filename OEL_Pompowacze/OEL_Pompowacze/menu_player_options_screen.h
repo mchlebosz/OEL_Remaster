@@ -34,6 +34,7 @@ byte draw_main_menu_screen(game_t* game, player_t* players, int current_player) 
 	const string s_drills = string_create_from_cstring("WIERTŁA");
 	const string s_pumps = string_create_from_cstring("POMPY");
 	const string s_trucks = string_create_from_cstring("TIRY");
+	const string s_fields = string_create_from_cstring("POLA NAFTOWE");
 	const string s_other_options = string_create_from_cstring("  POZOSTAŁE MOZLIWO$CI  ");
 	const string s_next_player = string_create_from_cstring("POMIN TURE");
 	
@@ -50,7 +51,8 @@ byte draw_main_menu_screen(game_t* game, player_t* players, int current_player) 
 	const button_t drills_btn = button_create(game->renderer, s_drills, 32, 100, 272, white);
 	const button_t pumps_btn = button_create(game->renderer, s_pumps, 32, 100, 304, black);
 	const button_t trucks_btn = button_create(game->renderer, s_trucks, 32, 100, 336, white);
-	const button_t next_player_btn = button_create(game->renderer, s_next_player, 32, 100, 422, black);
+	const button_t fields_btn = button_create(game->renderer, s_fields, 32, 100, 368, black);
+	const button_t next_player_btn = button_create(game->renderer, s_next_player, 32, 100, 452, white);
 
 	const SDL_Color cool_yellow = { 204, 191, 69 };
 
@@ -85,6 +87,7 @@ byte draw_main_menu_screen(game_t* game, player_t* players, int current_player) 
 		button_update(&pumps_btn, game->mouse);
 		button_update(&trucks_btn, game->mouse);
 		button_update(&next_player_btn, game->mouse);
+		button_update(&fields_btn, game->mouse);
 
 		if (mouse_click) {
 			if (drill_fac_btn.is_selected) result = 0;
@@ -93,6 +96,8 @@ byte draw_main_menu_screen(game_t* game, player_t* players, int current_player) 
 			if (drills_btn.is_selected) result = 3;
 			if (pumps_btn.is_selected) result = 4;
 			if (trucks_btn.is_selected) result = 5;
+			if (fields_btn.is_selected) result = 6;
+
 			if (next_player_btn.is_selected) {
 				running = false;
 				break;
@@ -109,7 +114,7 @@ byte draw_main_menu_screen(game_t* game, player_t* players, int current_player) 
 		label_draw_on_rect(&title_label, 100, 30, cool_yellow);
 		label_draw(&player_name_label, 100, 72);
 		label_draw_on_rect(&buying_label, 100, 142, external_bg_color);
-		label_draw_on_rect(&other_options_label, 100, 388, external_bg_color);
+		label_draw_on_rect(&other_options_label, 100, 418, external_bg_color);
 		
 		// draw buttons
 		button_draw(&drill_fac_btn);
@@ -119,7 +124,7 @@ byte draw_main_menu_screen(game_t* game, player_t* players, int current_player) 
 		button_draw(&pumps_btn);
 		button_draw(&trucks_btn);
 		button_draw(&next_player_btn);
-		
+		button_draw(&fields_btn);
 
 		mouse_draw(game->renderer, game->mouse);
 		SDL_RenderPresent(game->renderer);

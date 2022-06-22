@@ -29,9 +29,11 @@ struct player {
 	factory_t* drill_fac[4];
 	factory_t* pump_fac[3];
 	factory_t* trucks_fac[3];
+	factory_t* oil_fields[6];
 	int drills;
 	int pumps;
 	int trucks;
+	int oil;
 };
 
 typedef struct game game_t;
@@ -63,6 +65,12 @@ void game_background_draw(game_t* game) {
 	SDL_Rect subbg_rect = { x, y, width, height };
 	SDL_SetRenderDrawColor(game->renderer, 91, 47, 115, 255);
 	SDL_RenderFillRect(game->renderer, &subbg_rect);
+}
+
+inline int round1000(int x) {
+	const float tmp = x / 1000.f;
+	const float rounded = round(tmp);
+	return (int)(rounded * 1000);
 }
 
 #endif // GAME_H

@@ -41,7 +41,7 @@ void inputbox_update_text(inputbox_t* inputbox, char key) {
 	if (key == -1) return;
 	if (inputbox->active) {
 		if (key == SDLK_BACKSPACE) {
-			int remove_index = string_size(&inputbox->text) - 1;
+			int remove_index = (int)string_size(&inputbox->text) - 1;
 			if (remove_index >= 0)
 				string_remove(&inputbox->text, remove_index);
 			else
@@ -49,6 +49,8 @@ void inputbox_update_text(inputbox_t* inputbox, char key) {
 		} else {
 			string_append(&inputbox->text, key);
 		}
+		if (key == SDLK_RETURN) return;
+
 		label_free(&inputbox->lb);
 		SDL_Renderer* renderer = inputbox->lb.renderer;
 		inputbox->lb = label_create(renderer, inputbox->font_size, string_create_from_cstring(string_data(&inputbox->text)), inputbox->color);

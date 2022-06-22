@@ -25,7 +25,7 @@ int menu_set_item_cost(game_t* game, SDL_Color bgcolor, const char* title) {
 	const label_t label = label_create(game->renderer, 36, text, white);
 	inputbox_t input = input_create(game->renderer, 36, SCREEN_WIDTH / 2 - 90, SCREEN_HEIGHT / 2 + 10, 180, 15, black);
 
-	const SDL_Rect rect = { 50,100,SCREEN_WIDTH - 100, 25 };
+	const SDL_Rect rect = { 50, 100,SCREEN_WIDTH - 100, 25 };
 
 	while (running) {
 		// refreshrate cap
@@ -48,7 +48,7 @@ int menu_set_item_cost(game_t* game, SDL_Color bgcolor, const char* title) {
 				break;
 			case SDL_KEYDOWN: {
 				char c = get_pressed_key(event);
-				int text_length = string_size(&input.text);
+				int text_length = (int)string_size(&input.text);
 
 				if (text_length > 0 && c == SDLK_RETURN) {
 					running = false;

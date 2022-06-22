@@ -26,9 +26,9 @@ vector _generate_prices(float min_price, float max_price) {
 		float new_price = fvector_get(&prices, i - 1) + modifier;
 
 		if (new_price < min_price) {
-			new_price = min_price + fabs(modifier / 2.f);
+			new_price = min_price + (float)fabs(modifier / 2.f);
 		} else if (new_price > max_price) {
-			new_price = max_price - fabs(modifier / 2.f);
+			new_price = max_price - (float)fabs(modifier / 2.f);
 		}
 		new_price = roundf(new_price * 10) / 10;
 		fvector_push(&prices, new_price);
@@ -41,7 +41,7 @@ void _prices_draw(SDL_Renderer* renderer, vector* prices) {
 		int w = 25;
 		int x = SCREEN_WIDTH / 2 - prices->size * w / 2 + i * w;
 		int y = SCREEN_HEIGHT / 2 + 220;
-		int h = fvector_get(prices, i) * -200;
+		int h = (int)(fvector_get(prices, i) * -200);
 		SDL_Rect rect = {x, y, w, h};
 		SDL_SetRenderDrawColor(renderer, 143, 47, 101, 255);
 		SDL_RenderFillRect(renderer, &rect);

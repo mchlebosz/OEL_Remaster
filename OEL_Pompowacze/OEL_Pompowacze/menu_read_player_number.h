@@ -21,7 +21,7 @@ int read_player_number(game_t* game) {
 	const label_t label = label_create(game->renderer, 40, text, white);
 
 	SDL_Color bgcolor = { 91, 47, 115 };
-	inputbox_t box = input_create(game->renderer, 36, SCREEN_WIDTH / 2 - 60, SCREEN_HEIGHT / 2 + 10, 120, NULL, pink);
+	inputbox_t box = input_create(game->renderer, 36, SCREEN_WIDTH / 2 - 60, SCREEN_HEIGHT / 2 + 10, 120, 0, pink);
 
 	bool running = true;
 	double time = SDL_GetTicks();
@@ -45,7 +45,7 @@ int read_player_number(game_t* game) {
 				break;
 			case SDL_KEYDOWN: {
 				char c = get_pressed_key(event);
-				int text_length = string_size(&box.text);
+				int text_length = (int)string_size(&box.text);
 
 				if (text_length == 1 && c == SDLK_RETURN) {
 					running = false;

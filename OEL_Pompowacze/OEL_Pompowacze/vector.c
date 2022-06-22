@@ -26,7 +26,7 @@ void vector_load_array(vector* v, void* array, uint32 array_size)
 	memcpy(v->data, array, array_size * v->type_size);
 }
 
-void vector_free(vector* v)
+void vector_free(const vector* v)
 {
 	free(v->data);
 }
@@ -97,8 +97,8 @@ void vector_set(vector*v, uint32 index, void* value)
 void vector_reverse(vector* v)
 {
 	for (int i = 0; i < v->size / 2; ++i) {
-		void* front = (ptr_size)v->data + i * v->type_size;
-		void* back = (ptr_size)v->data + (v->size - i - 1) * v->type_size;
+		void* front = (ptr_size)v->data + i * (ptr_size)v->type_size;
+		void* back = (ptr_size)v->data + (ptr_size)(v->size - i - 1) * v->type_size;
 		void* first = malloc(v->type_size);
 		void* second = malloc(v->type_size);
 		memmove(first, front, v->type_size);

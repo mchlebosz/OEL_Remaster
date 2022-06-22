@@ -37,6 +37,7 @@ void test() {
 
 int main(int argc, char* args[])
 {
+	printf("%d ", round1000(4500));
 	srand(time(NULL));
 	//test();
 	
