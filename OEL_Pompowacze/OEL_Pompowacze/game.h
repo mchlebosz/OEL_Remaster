@@ -2,12 +2,13 @@
 
 #ifndef GAME_H
 #define GAME_H
+#define _CRT_SECURE_NO_WARNINGS
 
 #include <SDL.h>
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 
-#define GAME_LENGTH 32
+#define GAME_LENGTH 28
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 
@@ -17,12 +18,32 @@
 #pragma warning(disable:6386)
 #pragma warning(disable:6385)
 
+//
+// colors
+struct colors {
+	SDL_Color _white;
+	SDL_Color _pink;
+	SDL_Color _red;
+	SDL_Color _green;
+	SDL_Color _blue;
+	SDL_Color _yellow;
+	SDL_Color _orange;
+	SDL_Color _purple;
+	SDL_Color _brown;
+	SDL_Color _gray;
+	SDL_Color _black;
+	SDL_Color _internal_bg_color;
+	SDL_Color _external_bg_color;
+};
+typedef struct colors colors_t;
+
 struct game {
 	SDL_Window* window;
 	SDL_Renderer* renderer;
 	mouse_t* mouse;
 	double max_frequency; //  (1/max_fps)
 	FILE* logger;
+	colors_t _colors;
 };
 
 struct player {
@@ -41,46 +62,10 @@ struct player {
 typedef struct game game_t;
 typedef struct player player_t;
 
-//
-// colors
-const SDL_Color white = { 255,255,255 };
-const SDL_Color pink = { 255,0,255 };
-const SDL_Color red = { 255,0,0 };
-const SDL_Color green = { 0,255,0 };
-const SDL_Color blue = { 0,0,255 };
-const SDL_Color yellow = { 255,255,0 };
-const SDL_Color orange = { 255,165,0 };
-const SDL_Color purple = { 128,0,128 };
-const SDL_Color brown = { 165,42,42 };
-const SDL_Color gray = { 128,128,128 };
-const SDL_Color black = { 0,0,0 };
-const SDL_Color internal_bg_color = { 91, 47, 115 };
-const SDL_Color external_bg_color = { 143, 47, 101 };
+void game_background_draw(game_t* game);
 
-void game_background_draw(game_t* game) {
-	const int x = 35;
-	const int y = 20;
-	const int width = SCREEN_WIDTH - x * 2;
-	const int height = SCREEN_HEIGHT - y * 2;
-	SDL_SetRenderDrawColor(game->renderer, 143, 47, 101, 255);
-	SDL_RenderClear(game->renderer);
-	SDL_Rect subbg_rect = { x, y, width, height };
-	SDL_SetRenderDrawColor(game->renderer, 91, 47, 115, 255);
-	SDL_RenderFillRect(game->renderer, &subbg_rect);
-}
+int round1000(int x);
 
-inline int round1000(int x) {
-	const float tmp = x / 1000.f;
-	const float rounded = round(tmp);
-	return (int)(rounded * 1000);
-}
-
-void log_f(FILE* file, const char* const _Format, ...) {
-	va_list args;
-	va_start(args, _Format);
-	vfprintf(stdout, _Format, args);
-	vfprintf(file, _Format, args);
-	va_end(args);
-}
+void log_f(FILE* file, const char* const _Format, ...);
 
 #endif // GAME_H

@@ -148,9 +148,26 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="algorithms.c" />
+    <ClCompile Include="button.c" />
     <ClCompile Include="exceptions.c" />
     <ClCompile Include="extended_vector.c" />
+    <ClCompile Include="factories.c" />
+    <ClCompile Include="game.c" />
+    <ClCompile Include="inputbox.c" />
+    <ClCompile Include="label.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="menu.c" />
+    <ClCompile Include="menu_buy_factory_screen.c" />
+    <ClCompile Include="menu_buy_item_from_factory.c" />
+    <ClCompile Include="menu_buy_oil_field.c" />
+    <ClCompile Include="menu_end_of_year.c" />
+    <ClCompile Include="menu_game_summary.c" />
+    <ClCompile Include="menu_player_option_screen.c" />
+    <ClCompile Include="menu_read_player_names.c" />
+    <ClCompile Include="menu_read_player_number.c" />
+    <ClCompile Include="menu_set_item_cost.c" />
+    <ClCompile Include="mouse.c" />
+    <ClCompile Include="prediction_graph.c" />
     <ClCompile Include="string.c" />
     <ClCompile Include="vector.c" />
   </ItemGroup>
@@ -158,6 +175,7 @@
     <ClInclude Include="algorithms.h" />
     <ClInclude Include="basic_types.h" />
     <ClInclude Include="button.h" />
+    <ClInclude Include="colors.h" />
     <ClInclude Include="exceptions.h" />
     <ClInclude Include="extended_vector.h" />
     <ClInclude Include="game.h" />

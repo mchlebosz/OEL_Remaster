@@ -42,6 +42,33 @@ int main(int argc, char* args[])
 
 	game_t game = { window, renderer, mouse, max_frequency };
 
+	SDL_Color white1 = { 255,255,255 };
+	SDL_Color pink1 = { 255,0,255 };
+	SDL_Color red1 = { 255,0,0 };
+	SDL_Color green1 = { 0,255,0 };
+	SDL_Color blue1 = { 0,0,255 };
+	SDL_Color yellow1 = { 255,255,0 };
+	SDL_Color orange1 = { 255,165,0 };
+	SDL_Color purple1 = { 128,0,128 };
+	SDL_Color brown1 = { 165,42,42 };
+	SDL_Color gray1 = { 128,128,128 };
+	SDL_Color black1 = { 0,0,0 };
+	SDL_Color internal_bg_color1 = { 91, 47, 115 };
+	SDL_Color external_bg_color1 = { 143, 47, 101 };
+	game._colors._white = white1;
+	game._colors._pink = pink1;
+	game._colors._red = red1;
+	game._colors._green = green1;
+	game._colors._blue = blue1;
+	game._colors._yellow = yellow1;
+	game._colors._orange = orange1;
+	game._colors._purple = purple1;
+	game._colors._brown = brown1;
+	game._colors._gray = gray1;
+	game._colors._black = black1;
+	game._colors._internal_bg_color = internal_bg_color1;
+	game._colors._external_bg_color = external_bg_color1;
+
 	if (window == NULL) {
 		SDL_Quit();
 		log_f(log_file, "SDL_CreateWindow error: %s\n", SDL_GetError());
