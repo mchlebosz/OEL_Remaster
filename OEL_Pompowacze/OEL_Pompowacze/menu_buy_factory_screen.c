@@ -38,6 +38,8 @@ byte draw_buy_factory_screen(game_t* game, player_t* players, int current_player
 	label_t* cost_labels = (label_t*)malloc(sizeof(label_t) * factory_count);
 	label_t dollar_label = label_create(game->renderer, 36, s_dollar, bgcolor);
 	label_t title_label = label_create(game->renderer, 36, title, bgcolor);
+	title_label.rect.y = 100;
+	title_label.rect.x = SCREEN_WIDTH / 2 - title_label.rect.w / 2;;
 
 
 	int y_begin = 200;

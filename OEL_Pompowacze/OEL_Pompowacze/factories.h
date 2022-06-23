@@ -6,10 +6,10 @@
 #include <stdbool.h>
 
 enum factory_type {
-	DRILL,
-	PUMP,
-	TRUCK,
-	OIL,
+	DRILL = 0,
+	PUMP = 1,
+	TRUCK = 2,
+	OIL = 3,
 };
 
 struct factory {
