@@ -23,6 +23,9 @@ int main(int argc, char* args[])
 	const uint8 max_fps = 165;
 	const double max_frequency = 1.0 / (double)max_fps;
 	
+	FILE* log_file = fopen("logs.oel.txt", "wt");
+	if (!log_file) log_file = stdout;
+
 	SDL_Init(SDL_INIT_EVERYTHING);
 	TTF_Init();
 	
@@ -32,7 +35,7 @@ int main(int argc, char* args[])
 
 	mouse_t* mouse = (mouse_t*)malloc(sizeof(mouse_t));
 	if (mouse == NULL) {
-		printf("Error allocating memory for mouse\n");
+		log_f(log_file, "Error allocating memory for mouse\n");
 		return 1;
 	}
 	*mouse = mouse_create(renderer);
@@ -41,12 +44,19 @@ int main(int argc, char* args[])
 
 	if (window == NULL) {
 		SDL_Quit();
-		printf("SDL_CreateWindow error: %s\n", SDL_GetError());
+		log_f(log_file, "SDL_CreateWindow error: %s\n", SDL_GetError());
 		exit(1);
 	};
 	
+	
+
+	game.logger = log_file;
+
 	start_loop(&game);
 	
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+	fclose(game.logger);
 	SDL_Quit();
 	return 0;
 }

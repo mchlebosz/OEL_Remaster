@@ -39,4 +39,7 @@ void mouse_draw(SDL_Renderer* renderer, mouse_t* m) {
 	SDL_RenderCopy(renderer, m->txt, NULL, &m->rect);
 }
 
+void mouse_free(mouse_t* m) {
+	SDL_DestroyTexture(m->txt);
+}
 #endif // !MOUSE_H

@@ -75,7 +75,7 @@ void _buy_factory(player_t* players, int id, factory_t* factories, int factory_i
 	every single dig cost_per_item is increased by 455-500
 	when value reaches items_left up to 3*items_left, oil is available and player gains oil after next digs
 */
-void _dig_oil_field(player_t* player, factory_t* oil_field) {
+void _dig_oil_field(player_t* player, factory_t* oil_field, FILE* logger) {
 	if (player->drills <= 0) return;
 
 	int min = oil_field->items_left;
@@ -91,9 +91,9 @@ void _dig_oil_field(player_t* player, factory_t* oil_field) {
 	int depth = oil_field->cost_per_item;
 	if (depth < max) oil_field->buffer++;
 
-	printf("{player: %s,  dug: %d, oil at: %d}", player->name, depth, oil_field->items_left);
+	log_f(logger, "{player: %s,  dug: %d, oil at: %d}", player->name, depth, oil_field->items_left);
 	if (min <= depth && depth < max) {
-		printf(" OIL!!! ");
+		log_f(logger, " OIL!!! ");
 	}
 	puts("");
 }
@@ -103,7 +103,7 @@ void _dig_oil_field(player_t* player, factory_t* oil_field) {
 	buffer - pumps requeired
 	cost_per_item - current depth
 */
-void _pump_oil(player_t* player, factory_t* oil_field) {
+void _pump_oil(player_t* player, factory_t* oil_field, FILE* logger) {
 	if (player->pumps <= 0) return;
 
 	int min = oil_field->items_left;
@@ -122,44 +122,42 @@ void _pump_oil(player_t* player, factory_t* oil_field) {
 		oil_field->cost--;
 		int pumped = 8000 + 2000 * (rand() % 5);
 		player->oil += pumped;
-		printf("{ %s, %s, pumped: %d, left: %d }\n", player->name, oil_field->name, pumped, oil_field->cost);
+		log_f(logger, "{ %s, %s, pumped: %d, left: %d }\n", player->name, oil_field->name, pumped, oil_field->cost);
 	}
 }
 
-void players_dig_oil_fields(player_t* players, int player_count) {
+void players_dig_oil_fields(player_t* players, int player_count, FILE* logger) {
 	for (int i = 0; i < player_count; ++i) {
 		for (int j = 0; j < 6; ++j) { // check every oil field
 			if (players[i].oil_fields[j] == NULL) continue;
 
 			// try dig
-			_dig_oil_field(&players[i], players[i].oil_fields[j]);
+			_dig_oil_field(&players[i], players[i].oil_fields[j], logger);
 
 			// place pumps (as many as possible) and pump oil (once)
-			_pump_oil(&players[i], players[i].oil_fields[j]);
+			_pump_oil(&players[i], players[i].oil_fields[j], logger);
 		}
 	}
 }
 
-void _debug(player_t* players, int n) {
+void _debug(game_t* game, player_t* players, int n) {
 	for (int i = 0; i < n; ++i) {
-		printf("[BEGIN] %s {\n", players[i].name);
-		printf("\tmoney: %d,  oil: %d\n", players[i].money, players[i].oil);
-		printf("\tdrills: %d,  pumps: %d,  trucks: %d\n", players[i].drills, players[i].pumps, players[i].trucks);
+		log_f(game->logger, "[BEGIN] %s {\n", players[i].name);
+		log_f(game->logger, "\tmoney: %d,  oil: %d\n", players[i].money, players[i].oil);
+		log_f(game->logger, "\tdrills: %d,  pumps: %d,  trucks: %d\n", players[i].drills, players[i].pumps, players[i].trucks);
 		for (int j = 0; j < 6; ++j) { // check every oil field
 			if (players[i].oil_fields[j] == NULL) continue;
-			printf("\t - %s\n", players[i].oil_fields[j]->name);
+			log_f(game->logger, "\t - %s\n", players[i].oil_fields[j]->name);
 
 		}
-		printf("} [END]\n\n");
+		log_f(game->logger, "} [END]\n\n");
 	}
 }
 
 // main game loop
 void start_loop(game_t* game) {
-	FILE* log_file = fopen("logs.oel.txt", "wt");
-	if (!log_file) log_file = stdout;
+	log_f(game->logger, "\n[GAME START]\n");
 	const int players_count = read_player_number(game);
-	//const int players_count = 3;
 
 	// reading players' nicknames
 	const vector names = read_player_names(game, players_count);
@@ -168,13 +166,7 @@ void start_loop(game_t* game) {
 
 	vector pred = _generate_prices(0.1f, 2.1f); // in dollars $$$
 	draw_predicted_prices_screen(game, &pred);
-	/*
-	char* name;
-	int pumps_left;
-	int cost;
-	int cost_per_pump;
-	int player_id;
-	*/
+
 	const string titles[3] = {
 		string_create_from_cstring("SPRZEDAZ FABRYK WIERTE£"),
 		string_create_from_cstring("SPRZEDAZ ZAK£ADÓW POMP"),
@@ -218,11 +210,11 @@ void start_loop(game_t* game) {
 	};
 
 	load_factory_names_from_file(drill_factories, pump_factories, truck_factories, oil_fields);
-	printf("[LOADED OIL FIELDS] {\n");
+	log_f(game->logger, "[LOADED OIL FIELDS] {\n");
 	for (int i = 0; i < 6; ++i) {
-		printf("\t{ name: %s,  depth: %d,  cost: %d },\n", oil_fields[i].name, oil_fields[i].items_left, oil_fields[i].cost);
+		log_f(game->logger, "\t{ name: %s,  depth: %d,  cost: %d },\n", oil_fields[i].name, oil_fields[i].items_left, oil_fields[i].cost);
 	}
-	printf("} [END]\n");
+	log_f(game->logger, "} [END]\n");
 
 	bool running = true;
 	int i = 0;
@@ -238,63 +230,62 @@ void start_loop(game_t* game) {
 		byte option = draw_main_menu_screen(game, players, current_player);
 		switch (option) {
 			// 0,1,2 - zakup fabryk
-			case 0: {
-				byte id = draw_buy_factory_screen(game, players, current_player, drill_factories, 3, factory_buying_colors[DRILL], titles[DRILL]);
-				if (id == -1) break;
-				_buy_factory(players, current_player, drill_factories, id, DRILL);
-				break;
-			}
-			case 1: {
-				byte id = draw_buy_factory_screen(game, players, current_player, pump_factories, 3, factory_buying_colors[PUMP], titles[PUMP]);
-				if (id == -1) break;
-				_buy_factory(players, current_player, pump_factories, id, PUMP);
-				break;
-			}
-			case 2: {
-				byte id = draw_buy_factory_screen(game, players, current_player, truck_factories, 3, factory_buying_colors[TRUCK], titles[TRUCK]);
-				if (id == -1) break;
-				_buy_factory(players, current_player, truck_factories, id, TRUCK);
-				break;
-			}
-			// 3,4,5 - zakup przedmiotu
-			case 3: {
-				byte id = menu_buy_item(game, players, current_player, drill_factories, 3, gray, titles_buy[DRILL], DRILL);
-				break;
-			}
-			case 4: {
-				byte id = menu_buy_item(game, players, current_player, pump_factories, 3, gray, titles_buy[PUMP], PUMP);
-				break;
-			}
-			case 5: {
-				byte id = menu_buy_item(game, players, current_player, truck_factories, 3, gray, titles_buy[TRUCK], TRUCK);
-				break;
-			}
-			// 6- - zakup pola naftowego
-			case 6: {
-				byte id = menu_buy_oil_field(game, players, current_player, oil_fields, 6, factory_buying_colors[OIL]);
-				if (id == -1) break;
-				_buy_factory(players, current_player, oil_fields, id, OIL);
-				oil_fields[id].cost = (oil_fields[id].items_left / 500 * 4);
-				printf("{ pumps possible: %d }\n", oil_fields[id].cost);
+		case 0: {
+			byte id = draw_buy_factory_screen(game, players, current_player, drill_factories, 3, factory_buying_colors[DRILL], titles[DRILL]);
+			if (id == -1) break;
+			_buy_factory(players, current_player, drill_factories, id, DRILL);
+			break;
+		}
+		case 1: {
+			byte id = draw_buy_factory_screen(game, players, current_player, pump_factories, 3, factory_buying_colors[PUMP], titles[PUMP]);
+			if (id == -1) break;
+			_buy_factory(players, current_player, pump_factories, id, PUMP);
+			break;
+		}
+		case 2: {
+			byte id = draw_buy_factory_screen(game, players, current_player, truck_factories, 3, factory_buying_colors[TRUCK], titles[TRUCK]);
+			if (id == -1) break;
+			_buy_factory(players, current_player, truck_factories, id, TRUCK);
+			break;
+		}
+			  // 3,4,5 - zakup przedmiotu
+		case 3: {
+			byte id = menu_buy_item(game, players, current_player, drill_factories, 3, gray, titles_buy[DRILL], DRILL);
+			break;
+		}
+		case 4: {
+			byte id = menu_buy_item(game, players, current_player, pump_factories, 3, gray, titles_buy[PUMP], PUMP);
+			break;
+		}
+		case 5: {
+			byte id = menu_buy_item(game, players, current_player, truck_factories, 3, gray, titles_buy[TRUCK], TRUCK);
+			break;
+		}
+			  // 6 - zakup pola naftowego
+		case 6: {
+			byte id = menu_buy_oil_field(game, players, current_player, oil_fields, 6, factory_buying_colors[OIL]);
+			if (id == -1) break;
+			_buy_factory(players, current_player, oil_fields, id, OIL);
+			oil_fields[id].cost = (oil_fields[id].items_left / 500 * 4);
+			log_f(game->logger, "{ pumps possible: %d }\n", oil_fields[id].cost);
 				break;
 			}
 			
 		}
 		
 		if (current_player == players_count - 1) { // end of year
-			_debug(players, players_count);
-			players_dig_oil_fields(players, players_count);
+			_debug(game, players, players_count);
+			players_dig_oil_fields(players, players_count, game->logger);
 			
-			draw_year_summary_and_sell_oil(game, players, players_count, &pred, year);
 			// end of year screen....
+			draw_year_summary_and_sell_oil(game, players, players_count, &pred, year);
 		}
 	}
 
 	draw_game_summary(game, players, players_count);
-
+	log_f(game->logger, "[GAME FINISHED]\n\n");
 
 	vector_free(&names);
-	fclose(log_file);
 }
 
 

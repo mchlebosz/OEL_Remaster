@@ -22,6 +22,7 @@ struct game {
 	SDL_Renderer* renderer;
 	mouse_t* mouse;
 	double max_frequency; //  (1/max_fps)
+	FILE* logger;
 };
 
 struct player {
@@ -72,6 +73,14 @@ inline int round1000(int x) {
 	const float tmp = x / 1000.f;
 	const float rounded = round(tmp);
 	return (int)(rounded * 1000);
+}
+
+void log_f(FILE* file, const char* const _Format, ...) {
+	va_list args;
+	va_start(args, _Format);
+	vfprintf(stdout, _Format, args);
+	vfprintf(file, _Format, args);
+	va_end(args);
 }
 
 #endif // GAME_H

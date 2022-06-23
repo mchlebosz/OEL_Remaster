@@ -55,8 +55,6 @@ void draw_game_summary(game_t* game, player_t* players, int player_count) {
 			switch (event.type) {
 			case SDL_QUIT:
 				running = false;
-				SDL_Quit();
-				exit(0);
 				break;
 			case SDL_MOUSEBUTTONDOWN:
 				mouse_click = true;
