@@ -4,6 +4,7 @@
 #ifndef STRING_H
 #define STRING_H
 
+#define _CRT_SECURE_NO_WARNINGS
 #include "basic_types.h"
 #include "exceptions.h"
 #include "vector.h"
@@ -25,5 +26,10 @@ char* string_begin(const string* s);
 char* string_end(const string* s);
 size_t string_size(const string* const s);
 string string_copy(const string* s);
+
+string int2string(int n);
+string float2string(float n);
+void string_append_int(string* s, int value);
+void string_append_float(string* s, float value);
 
 #endif // !STRING_H

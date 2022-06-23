@@ -80,6 +80,35 @@ string string_copy(const string* s)
 	return string_create_from_cstring(s->data);
 }
 
+string int2string(int n)
+{
+	char buff[33];
+	memset(buff, NULL, 33 * sizeof(char));
+	sprintf(buff, "%d", n);
+	return string_create_from_cstring(buff);
+}
 
+string float2string(float n)
+{
+	char buff[33];
+	memset(buff, NULL, 33 * sizeof(char));
+	sprintf(buff, "%.1f", n);
+	return string_create_from_cstring(buff);
+}
 
+void string_append_int(string* s, int value)
+{
+	char buff[33];
+	memset(buff, NULL, 33 * sizeof(char));
+	sprintf(buff, "%d", value);
+	string_append_range(s, buff);
+}
+
+void string_append_float(string* s, float value)
+{
+	char buff[33];
+	memset(buff, NULL, 33 * sizeof(char));
+	sprintf(buff, "%.1f", value);
+	string_append_range(s, buff);
+}
 

@@ -24,6 +24,7 @@ int menu_set_item_cost(game_t* game, SDL_Color bgcolor, const char* title) {
 	const string text = string_create_from_cstring(title);
 	const label_t label = label_create(game->renderer, 36, text, white);
 	inputbox_t input = input_create(game->renderer, 36, SCREEN_WIDTH / 2 - 90, SCREEN_HEIGHT / 2 + 10, 180, 15, black);
+	input.active = true;
 
 	const SDL_Rect rect = { 50, 100,SCREEN_WIDTH - 100, 25 };
 
@@ -54,7 +55,8 @@ int menu_set_item_cost(game_t* game, SDL_Color bgcolor, const char* title) {
 					running = false;
 					break;
 				}
-				if (c == '\b') inputbox_update_text(&input, c);
+				if (c == '\r') { }
+				else if (c == '\b') inputbox_update_text(&input, c);
 				else if ('0' <= c && c <= '9') inputbox_update_text(&input, c);
 				break;
 			}

@@ -25,6 +25,7 @@
 #include "menu_buy_item_from_factory.h"
 #include "menu_set_item_cost.h"
 #include "menu_buy_oil_field.h"
+#include "menu_end_of_year.h"
 
 // string to upper
 void _array_toupper(char* data) {
@@ -77,7 +78,7 @@ void _dig_oil_field(player_t* player, factory_t* oil_field) {
 	if (player->drills <= 0) return;
 
 	int min = oil_field->items_left;
-	int max = 3 * oil_field->items_left;
+	int max = oil_field->items_left * 7 / 2;
 
 	if (oil_field->cost_per_item >= max) return;
 
@@ -105,7 +106,7 @@ void _pump_oil(player_t* player, factory_t* oil_field) {
 	if (player->pumps <= 0) return;
 
 	int min = oil_field->items_left;
-	int max = 3 * oil_field->items_left;
+	int max = oil_field->items_left * 7 / 2;
 
 	if (oil_field->cost_per_item < min) return;
 	if (oil_field->cost <= 0) return;
@@ -120,7 +121,7 @@ void _pump_oil(player_t* player, factory_t* oil_field) {
 
 	if (oil_field->buffer == 0) {
 		oil_field->cost--;
-		player->oil += 8000 + 2000 * (rand() % 4);
+		player->oil += 8000 + 2000 * (rand() % 5);
 	}
 }
 
@@ -140,20 +141,22 @@ void players_dig_oil_fields(player_t* players, int player_count) {
 
 void _debug(player_t* players, int n) {
 	for (int i = 0; i < n; ++i) {
-		printf("[BEGIN] %s\n", players[i].name);
-		printf("money: %d,  oil: %d\n", players[i].money, players[i].oil);
-		printf("drills: %d,  pumps: %d,  trucks: %d\n", players[i].drills, players[i].pumps, players[i].trucks);
+		printf("[BEGIN] %s {\n", players[i].name);
+		printf("\tmoney: %d,  oil: %d\n", players[i].money, players[i].oil);
+		printf("\tdrills: %d,  pumps: %d,  trucks: %d\n", players[i].drills, players[i].pumps, players[i].trucks);
 		for (int j = 0; j < 6; ++j) { // check every oil field
 			if (players[i].oil_fields[j] == NULL) continue;
-			printf("  - %s\n", players[i].oil_fields[j]->name);
+			printf("\t - %s\n", players[i].oil_fields[j]->name);
 
 		}
-		printf("[END]\n\n");
+		printf("} [END]\n\n");
 	}
 }
 
 // main game loop
 void start_loop(game_t* game) {
+	FILE* log_file = fopen("logs.oel.txt", "wt");
+	if (!log_file) log_file = stdout;
 	// const int players_count = read_player_number(game);
 	const int players_count = 2;
 
@@ -162,7 +165,7 @@ void start_loop(game_t* game) {
 	player_t* players = init_players(&names); // players' structures, size=players_count
 
 	vector pred = _generate_prices(0.1f, 2.1f); // in dollars $$$
-	//draw_predicted_prices_screen(game, &pred);
+	draw_predicted_prices_screen(game, &pred);
 	/*
 	char* name;
 	int pumps_left;
@@ -188,34 +191,36 @@ void start_loop(game_t* game) {
 	};
 
 	factory_t drill_factories[3] = {
-		{ NULL, 57, rand() % 10000 + 40000, -1, -1 },
-		{ NULL, 57, rand() % 10000 + 40000, -1, -1 },
-		{ NULL, 49, rand() % 8000 + 30000, -1, -1 }
+		{ NULL, 57, rand() % 11000 + 45000, -1, -1 },
+		{ NULL, 57, rand() % 10000 + 39000, -1, -1 },
+		{ NULL, 49, rand() % 7000 + 28000, -1, -1 }
 	};
 	factory_t pump_factories[3] = {
+		{ NULL, 60, rand() % 9000 + 42000, -1, -1 },
 		{ NULL, 60, rand() % 8000 + 35000, -1, -1 },
-		{ NULL, 60, rand() % 8000 + 35000, -1, -1 },
-		{ NULL, 49, rand() % 6000 + 29000, -1, -1 }
+		{ NULL, 49, rand() % 6000 + 26000, -1, -1 }
 	};
 	factory_t truck_factories[3] = {
 		{ NULL, 36, rand() % 6000 + 27000, -1, -1 },
-		{ NULL, 42, rand() % 9000 + 27000, -1, -1 },
-		{ NULL, 30, rand() % 5000 + 23000, -1, -1 }
+		{ NULL, 42, rand() % 9000 + 37000, -1, -1 },
+		{ NULL, 30, rand() % 5000 + 21000, -1, -1 }
 	};
 	// second parameter is depth of oil, third - cost, forth - total meters dug
 	factory_t oil_fields[6] = {
-		{"", round1000(1950 + rand() % 3000), rand() % 70000 + 30000, 0, -1, 0},
+		{"", round1000(1950 + rand() % 3000), rand() % 60000 + 30000, 0, -1, 0},
 		{"", round1000(950 + rand() % 2500), rand() % 15000 + 20000, 0, -1, 0},
-		{"", round1000(400 + rand() % 3000), rand() % 30000 + 20000, 0, -1, 0},
-		{"", round1000(1400 + rand() % 2500), rand() % 35000 + 15000, 0, -1, 0},
-		{"", round1000(1400 + rand() % 4000), rand() % 10000 + 85000, 0, -1, 0},
-		{"", round1000(3900 + rand() % 1500), rand() % 50000 + 80000, 0, -1, 0},
+		{"", round1000(400 + rand() % 3000), rand() % 25000 + 20000, 0, -1, 0},
+		{"", round1000(1400 + rand() % 2500), rand() % 30000 + 15000, 0, -1, 0},
+		{"", round1000(1400 + rand() % 4000), rand() % 10000 + 75000, 0, -1, 0},
+		{"", round1000(3900 + rand() % 1500), rand() % 45000 + 70000, 0, -1, 0},
 	};
 
 	load_factory_names_from_file(drill_factories, pump_factories, truck_factories, oil_fields);
+	printf("[LOADED OIL FIELDS] {\n");
 	for (int i = 0; i < 6; ++i) {
-		printf("name: %s,  depth: %d,  cost: %d\n", oil_fields[i].name, oil_fields[i].items_left, oil_fields[i].cost);
+		printf("\t{ name: %s,  depth: %d,  cost: %d },\n", oil_fields[i].name, oil_fields[i].items_left, oil_fields[i].cost);
 	}
+	printf("} [END]\n");
 
 	bool running = true;
 	int i = 0;
@@ -223,7 +228,7 @@ void start_loop(game_t* game) {
 	while (running) {
 		const int current_player = i % players_count;
 		const int year = i / players_count;
-		if (year == 20) {
+		if (year == GAME_LENGTH) {
 			running = false;
 			break;
 		}
@@ -265,9 +270,9 @@ void start_loop(game_t* game) {
 			// 6- - zakup pola naftowego
 			case 6: {
 				byte id = menu_buy_oil_field(game, players, current_player, oil_fields, 6, factory_buying_colors[OIL]);
+				if (id == -1) break;
 				_buy_factory(players, current_player, oil_fields, id, OIL);
 				oil_fields[id].cost = (oil_fields[id].items_left * 2) / 1000;
-				printf("pumps: %d\n", oil_fields[id].cost);
 				break;
 			}
 			
@@ -277,6 +282,7 @@ void start_loop(game_t* game) {
 			_debug(players, players_count);
 			players_dig_oil_fields(players, players_count);
 			
+			draw_year_summary_and_sell_oil(game, players, players_count, &pred, year);
 			// end of year screen....
 		}
 	}
@@ -287,6 +293,7 @@ void start_loop(game_t* game) {
 
 
 	vector_free(&names);
+	fclose(log_file);
 }
 
 

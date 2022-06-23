@@ -13,7 +13,7 @@ vector _generate_prices(float min_price, float max_price) {
 	float mean_price = (min_price + max_price) / 2;
 	fvector_push(&prices, mean_price);
 	
-	for (int i = 1; i < 20; ++i) {
+	for (int i = 1; i < GAME_LENGTH; ++i) {
 		// create normal distribution number
 		float nd = 0.f;
 		for (int j = 0; j < 12; ++j) {
@@ -38,7 +38,7 @@ vector _generate_prices(float min_price, float max_price) {
 
 void _prices_draw(SDL_Renderer* renderer, vector* prices) {
 	for (int i = 0; i < prices->size; ++i) {
-		int w = 25;
+		int w = 640 / GAME_LENGTH;
 		int x = SCREEN_WIDTH / 2 - prices->size * w / 2 + i * w;
 		int y = SCREEN_HEIGHT / 2 + 220;
 		int h = (int)(fvector_get(prices, i) * -200);

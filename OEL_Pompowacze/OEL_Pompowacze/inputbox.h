@@ -16,6 +16,7 @@ struct inputbox {
 	int font_size;
 	SDL_Color color;
 	SDL_Rect rect;
+	SDL_Color border_color;
 };
 
 typedef struct inputbox inputbox_t;
@@ -34,6 +35,8 @@ inputbox_t input_create(SDL_Renderer* renderer, int font_size, int x, int y, int
 	input.rect.y = y;
 	input.font_size = font_size;
 	input.color = color;
+	SDL_Color tmp = { 255,255,255 };
+	input.border_color = tmp;
 	return input;
 }
 
@@ -70,7 +73,7 @@ void inputbox_update(inputbox_t* inputbox, mouse_t* mouse, bool mouse_click) {
 
 void inputbox_draw(inputbox_t* inputbox) {
 	label_draw(&inputbox->lb, inputbox->rect.x + 3, inputbox->rect.y);
-	SDL_SetRenderDrawColor(inputbox->lb.renderer, 255, 255, 255, 255); // draw border
+	SDL_SetRenderDrawColor(inputbox->lb.renderer, inputbox->border_color.r, inputbox->border_color.g, inputbox->border_color.b, 255); // draw border
 	SDL_RenderDrawRect(inputbox->lb.renderer, &inputbox->rect);
 }
 

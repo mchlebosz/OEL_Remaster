@@ -9,35 +9,14 @@
 
 #include "game.h"
 #include "menu.h"
+#include "mouse.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include "label.h"
-#include "mouse.h"
-#include "button.h"
-#include "string.h"
-#include "inputbox.h"
-#include "predictions_graph.h"
 
-void test() {
-	SDL_Window* window = SDL_CreateWindow("OEL Pompowacze:Remake!", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-	while (true) {
-
-		inputbox_t box = input_create(renderer, 23, 0, 0, 23, 23, green);
-		for (int i = 0; i < 200; ++i) {
-			inputbox_update_text(&box, 'a');
-		}
-		inputbox_draw(&box);
-		inputbox_free(&box);
-
-	}
-	exit(1);
-}
 
 int main(int argc, char* args[])
 {
-	printf("%d ", round1000(4500));
 	srand(time(NULL));
 	//test();
 	
@@ -65,16 +44,6 @@ int main(int argc, char* args[])
 		printf("SDL_CreateWindow error: %s\n", SDL_GetError());
 		exit(1);
 	};
-
-	
-	
-	/*
-	SDL_Texture* txt = IMG_LoadTexture(renderer, "test.png");
-	if (!txt) {
-		printf("IMG_LoadTexture error: %s\n", IMG_GetError());
-		exit(1);
-	}
-	*/
 	
 	start_loop(&game);
 	

@@ -23,9 +23,7 @@ byte draw_main_menu_screen(game_t* game, player_t* players, int current_player) 
 	string s_player_name = string_create_from_cstring("GRACZ:  ");
 	string_append_range(&s_player_name, players[current_player].name);
 	string_append_range(&s_player_name, "    $= ");
-	char buff[32];
-	sprintf(buff, "%d", players[current_player].money);
-	string_append_range(&s_player_name, buff);
+	string_append_int(&s_player_name, players[current_player].money);
 
 	const string s_buying = string_create_from_cstring("  KUPOWANIE  ");
 	const string s_drill_factories = string_create_from_cstring("FABRYKI WIERTEŁ");

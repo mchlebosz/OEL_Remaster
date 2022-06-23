@@ -105,7 +105,7 @@ byte menu_buy_item(game_t* game, player_t* players, int current_player, factory_
 			for (int i = 0; i < factory_count; ++i) {
 				if (buttons[i].is_selected) { // buy items
 					if (factories[i].player_id == -1) continue;
-					int count = INT_MAX >> 10;
+					int count = SHRT_MAX;
 					while (count * factories[i].cost_per_item > players[current_player].money || count > factories[i].items_left) {
 						count = menu_set_item_cost(game, bgcolor, "ILE SZTUK CHCESZ KUPIC? :");
 					}

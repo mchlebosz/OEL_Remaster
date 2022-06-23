@@ -7,6 +7,7 @@
 #include <SDL_ttf.h>
 #include <SDL_image.h>
 
+#define GAME_LENGTH 32
 #define SCREEN_WIDTH 800
 #define SCREEN_HEIGHT 600
 

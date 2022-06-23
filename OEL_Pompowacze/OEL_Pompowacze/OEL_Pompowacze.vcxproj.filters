@@ -114,4 +114,9 @@
     <Text Include="truck_factories.txt" />
     <Text Include="oil_fields.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="truck.png">
+      <Filter>Pliki zasobów</Filter>
+    </Image>
+  </ItemGroup>
 </Project>
