@@ -26,6 +26,7 @@
 #include "menu_set_item_cost.h"
 #include "menu_buy_oil_field.h"
 #include "menu_end_of_year.h"
+#include "menu_game_summary.h"
 
 // string to upper
 void _array_toupper(char* data) {
@@ -78,7 +79,7 @@ void _dig_oil_field(player_t* player, factory_t* oil_field) {
 	if (player->drills <= 0) return;
 
 	int min = oil_field->items_left;
-	int max = oil_field->items_left * 7 / 2;
+	int max = oil_field->items_left * 3;
 
 	if (oil_field->cost_per_item >= max) return;
 
@@ -97,7 +98,7 @@ void _dig_oil_field(player_t* player, factory_t* oil_field) {
 	puts("");
 }
 /*
-
+	items_left - depth
 	cost - how many times oil can be pumped
 	buffer - pumps requeired
 	cost_per_item - current depth
@@ -106,7 +107,7 @@ void _pump_oil(player_t* player, factory_t* oil_field) {
 	if (player->pumps <= 0) return;
 
 	int min = oil_field->items_left;
-	int max = oil_field->items_left * 7 / 2;
+	int max = oil_field->items_left * 3;
 
 	if (oil_field->cost_per_item < min) return;
 	if (oil_field->cost <= 0) return;
@@ -117,11 +118,11 @@ void _pump_oil(player_t* player, factory_t* oil_field) {
 		player->pumps--;
 	}
 
-	printf("{to pump: %d}\n", oil_field->cost);
-
 	if (oil_field->buffer == 0) {
 		oil_field->cost--;
-		player->oil += 8000 + 2000 * (rand() % 5);
+		int pumped = 8000 + 2000 * (rand() % 5);
+		player->oil += pumped;
+		printf("{ %s, %s, pumped: %d, left: %d }\n", player->name, oil_field->name, pumped, oil_field->cost);
 	}
 }
 
@@ -157,12 +158,13 @@ void _debug(player_t* players, int n) {
 void start_loop(game_t* game) {
 	FILE* log_file = fopen("logs.oel.txt", "wt");
 	if (!log_file) log_file = stdout;
-	// const int players_count = read_player_number(game);
-	const int players_count = 2;
+	const int players_count = read_player_number(game);
+	//const int players_count = 3;
 
 	// reading players' nicknames
 	const vector names = read_player_names(game, players_count);
 	player_t* players = init_players(&names); // players' structures, size=players_count
+
 
 	vector pred = _generate_prices(0.1f, 2.1f); // in dollars $$$
 	draw_predicted_prices_screen(game, &pred);
@@ -193,26 +195,26 @@ void start_loop(game_t* game) {
 	factory_t drill_factories[3] = {
 		{ NULL, 57, rand() % 11000 + 45000, -1, -1 },
 		{ NULL, 57, rand() % 10000 + 39000, -1, -1 },
-		{ NULL, 49, rand() % 7000 + 28000, -1, -1 }
+		{ NULL, 49, rand() % 5000 + 27000, -1, -1 }
 	};
 	factory_t pump_factories[3] = {
 		{ NULL, 60, rand() % 9000 + 42000, -1, -1 },
 		{ NULL, 60, rand() % 8000 + 35000, -1, -1 },
-		{ NULL, 49, rand() % 6000 + 26000, -1, -1 }
+		{ NULL, 49, rand() % 6000 + 25000, -1, -1 }
 	};
 	factory_t truck_factories[3] = {
 		{ NULL, 36, rand() % 6000 + 27000, -1, -1 },
 		{ NULL, 42, rand() % 9000 + 37000, -1, -1 },
-		{ NULL, 30, rand() % 5000 + 21000, -1, -1 }
+		{ NULL, 30, rand() % 5000 + 20000, -1, -1 }
 	};
 	// second parameter is depth of oil, third - cost, forth - total meters dug
 	factory_t oil_fields[6] = {
-		{"", round1000(1950 + rand() % 3000), rand() % 60000 + 30000, 0, -1, 0},
-		{"", round1000(950 + rand() % 2500), rand() % 15000 + 20000, 0, -1, 0},
-		{"", round1000(400 + rand() % 3000), rand() % 25000 + 20000, 0, -1, 0},
-		{"", round1000(1400 + rand() % 2500), rand() % 30000 + 15000, 0, -1, 0},
-		{"", round1000(1400 + rand() % 4000), rand() % 10000 + 75000, 0, -1, 0},
-		{"", round1000(3900 + rand() % 1500), rand() % 45000 + 70000, 0, -1, 0},
+		{"", round1000(2950 + rand() % 3000), rand() % 60000 + 30000, 0, -1, 0},
+		{"", round1000(1450 + rand() % 2000), rand() % 13000 + 12000, 0, -1, 0},
+		{"", round1000(1450 + rand() % 1500), rand() % 12000 + 11000, 0, -1, 0},
+		{"", round1000(2500 + rand() % 2500), rand() % 30000 + 15000, 0, -1, 0},
+		{"", round1000(1400 + rand() % 2500), rand() % 10000 + 35000, 0, -1, 0},
+		{"", round1000(4200 + rand() % 2900), rand() % 45000 + 70000, 0, -1, 0},
 	};
 
 	load_factory_names_from_file(drill_factories, pump_factories, truck_factories, oil_fields);
@@ -272,7 +274,8 @@ void start_loop(game_t* game) {
 				byte id = menu_buy_oil_field(game, players, current_player, oil_fields, 6, factory_buying_colors[OIL]);
 				if (id == -1) break;
 				_buy_factory(players, current_player, oil_fields, id, OIL);
-				oil_fields[id].cost = (oil_fields[id].items_left * 2) / 1000;
+				oil_fields[id].cost = (oil_fields[id].items_left / 500 * 4);
+				printf("{ pumps possible: %d }\n", oil_fields[id].cost);
 				break;
 			}
 			
@@ -287,9 +290,7 @@ void start_loop(game_t* game) {
 		}
 	}
 
-	// TODO: draw summary screen!
-	// ...
-	// ...
+	draw_game_summary(game, players, players_count);
 
 
 	vector_free(&names);

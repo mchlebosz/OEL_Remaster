@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL.h>
+#include <SDL_image.h>
 #include "label.h"
 #include "game.h"
 #include "vector.h"
@@ -140,7 +141,6 @@ int end_of_year_screen(game_t* game, player_t* players, int current_player, vect
 		mouse_draw(game->renderer, game->mouse);
 		SDL_RenderPresent(game->renderer);
 	}
-
 	SDL_DestroyTexture(truck_img);
 
 	label_free(&player_name_label);
